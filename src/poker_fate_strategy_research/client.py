@@ -109,6 +109,12 @@ class ProtocolClient:
             )
 
     def _room_response(self, packet: Packet) -> None:
+        if not self.logged_in:
+            return
+
+        if packet.name == 'pb.GetRoomDataRSP' and self.options.room_id is None:
+            return
+
         fields = self.schema.decode(packet.name, packet.payload)
         code = fields.get('code', 0)
         if code != 0:

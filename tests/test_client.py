@@ -295,3 +295,46 @@ def test_received_frame_evidence_survives_processing_failure(
         assert packets[0]['monotonic_ns'] == packets[1]['monotonic_ns']
 
     assert rows[-1]['status'] == 'failed'
+
+
+@pytest.mark.parametrize('response', ['snapshot', 'before-login', 'quick-start'])
+def test_training_requires_enter_room_after_login(
+    tmp_path: Path,
+    descriptors: bytes,
+    session: Session,
+    response: str,
+) -> None:
+    schema = Schema(descriptors)
+    room: dict[str, object] = {'roomid': 27, 'game_type': 40010101}
+
+    async def server(socket: ServerConnection) -> None:
+        await receive(socket)
+        if response == 'before-login':
+            await reply(socket, schema, 'pb.EnterRoomRSP', room)
+
+        await reply(socket, schema, 'pb.UserLoginRSP', {})
+        assert (await receive(socket)).name == 'pb.QuickStartREQ'
+        await reply(socket, schema, 'pb.QuickStartRSP', {})
+        if response == 'snapshot':
+            await reply(socket, schema, 'pb.GetRoomDataRSP', room)
+
+        await socket.close()
+
+    async def run() -> None:
+        async with serve(server, '127.0.0.1', 0) as listener:
+            port = listener.sockets[0].getsockname()[1]
+            with pytest.raises(ClientError, match='requested room was ready'):
+                await observe(
+                    replace(session, server_url=f'ws://127.0.0.1:{port}'),
+                    descriptors,
+                    tmp_path / 'capture.jsonl',
+                    Observation(practice=Practice(40)),
+                )
+
+    asyncio.run(run())
+    rows = [
+        json.loads(line)
+        for line in (tmp_path / 'capture.jsonl').read_text().splitlines()
+    ]
+    assert not any(row['event'] == 'room-ready' for row in rows)
+    assert rows[-1]['status'] == 'failed'

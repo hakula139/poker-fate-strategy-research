@@ -23,7 +23,7 @@ def descriptors() -> bytes:
         ],
         'QuickStartRSP': [('code', 5)],
         'EnterRoomRSP': [('code', 5), ('roomid', 5), ('game_type', 5)],
-        'GetRoomDataRSP': [('code', 5), ('roomid', 5)],
+        'GetRoomDataRSP': [('code', 5), ('roomid', 5), ('game_type', 5)],
         'CardsBRC': [('uid', 3), ('stage', 5), ('card', 5), ('key', 9)],
     }
     for name, fields in messages.items():
