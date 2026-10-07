@@ -8,8 +8,8 @@ Follow the user's global instructions. Keep this file focused on constraints tha
 - Keep APKs, decoded client sources, raw captures, account identifiers, and credentials in ignored `artifacts/`, `work/`, or `data/`. Commit analysis tools, provenance, and concise evidence references.
 - Separate observations, hypotheses, and live-server results. State the limits of static evidence and keep source references beside each finding.
 - Preserve message timing and recipient context when a finding depends on runtime data. Keep artifact-specific investigation methods with the corresponding research document.
-- Use only user-authorized accounts and test actions. Follow the official authentication flow and let the user enter passwords and verification codes. Keep session material local. Do not automate gameplay on public tables.
-- Discuss client instrumentation, new installation requirements, and changes to test scope with the user before proceeding. Static inspection of official artifacts is authorized.
+- Use user-authorized accounts and test actions. Keep credentials and session material local, and let the user handle verification challenges.
+- Discuss client instrumentation, new installation requirements, and changes to test scope with the user before proceeding. Confirm actions that change live game state or incur costs. Static inspection of official artifacts is authorized.
 
 ## Development
 
