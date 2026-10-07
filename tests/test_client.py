@@ -187,6 +187,7 @@ def test_invalid_training_buy_in(buy_in: int) -> None:
     [
         {'code': -1},
         {'code': 0, 'roomid': 0},
+        {'code': 0, 'roomid': 17},
         None,
     ],
 )
