@@ -29,6 +29,9 @@ jobs:
       - name: Check
         run: nix flake check --print-build-logs
 
+      - name: Test proxy runtime
+        run: nix develop -c uv run --locked pytest -q tests/test_proxy_runtime.py
+
   python:
     name: Python Check
     runs-on: ubuntu-latest

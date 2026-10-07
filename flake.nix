@@ -89,6 +89,7 @@
               git
               jadx
               jq
+              mitmproxy
               protobuf
               python314
               ripgrep

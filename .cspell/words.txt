@@ -1,3 +1,4 @@
+addonmanager
 apktool
 cachix
 chnl
@@ -15,6 +16,7 @@ isort
 jadx
 libil2cpp
 markdownlint
+mitmdump
 mypy
 nixfmt
 nixos
