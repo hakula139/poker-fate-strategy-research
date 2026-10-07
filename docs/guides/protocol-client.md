@@ -82,7 +82,7 @@ The source of these request fields is the [Android 1.7.0 artifact](../reference/
 
 ## Interpret a recording
 
-Each packet includes its sequence, direction, room ID, recipient context, UTC `observed_at`, and local `monotonic_ns`. Receive timestamps are taken after WebSocket message reassembly. Send timestamps are taken after the transport accepts the send. Multiple protocol packets in one WebSocket message share an observation timestamp and retain sequence order.
+Each packet includes its sequence, direction, room ID, recipient context, UTC `observed_at`, and local `monotonic_ns`. Receive timestamps are taken after WebSocket message reassembly. Send timestamps are taken after the transport accepts the send. Multiple protocol packets in one WebSocket message share an observation timestamp and retain sequence order. All parsed packets are recorded before lifecycle handling, so a server rejection preserves later evidence from the same frame. Invalid framing records the receive times, frame size and error category without saving raw bytes or a frame hash.
 
 The recorder omits authentication payloads. UID fields become `self` or stable per-recording player aliases, and names in player records are removed. Known credential fields and the active session key are redacted. Non-authentication payload hashes identify local observations, while raw payload bytes are omitted. Unknown fields, free-form text and unrecognized identity formats still require review before sharing a recording. Captures stay in ignored local storage and are created with mode `600`. Existing output files are never overwritten.
 

@@ -231,3 +231,62 @@ def test_snapshot_rejection_or_missing_response(
         json.loads((tmp_path / 'capture.jsonl').read_text().splitlines()[-1])['status']
         == 'failed'
     )
+
+
+@pytest.mark.parametrize('malformed_tail', [False, True])
+def test_received_frame_evidence_survives_processing_failure(
+    tmp_path: Path,
+    descriptors: bytes,
+    session: Session,
+    malformed_tail: bool,
+) -> None:
+    schema = Schema(descriptors)
+    frame = pack(
+        Packet('pb.UserLoginRSP', 0, schema.encode('pb.UserLoginRSP', {'code': -1}))
+    )
+    frame += (
+        b'\x00'
+        if malformed_tail
+        else pack(
+            Packet(
+                'pb.CardsBRC',
+                27,
+                schema.encode('pb.CardsBRC', {'uid': 1234, 'card': 52}),
+            )
+        )
+    )
+
+    async def server(socket: ServerConnection) -> None:
+        await receive(socket)
+        await socket.send(frame)
+        await socket.wait_closed()
+
+    async def run() -> None:
+        async with serve(server, '127.0.0.1', 0) as listener:
+            port = listener.sockets[0].getsockname()[1]
+            with pytest.raises(ClientError):
+                await observe(
+                    replace(session, server_url=f'ws://127.0.0.1:{port}'),
+                    descriptors,
+                    tmp_path / 'capture.jsonl',
+                    Observation(),
+                )
+
+    asyncio.run(run())
+    rows = [
+        json.loads(line)
+        for line in (tmp_path / 'capture.jsonl').read_text().splitlines()
+    ]
+    if malformed_tail:
+        error = next(row for row in rows if row['event'] == 'framing-error')
+        assert error['frame_size'] == len(frame)
+        assert error['observed_at'] and error['monotonic_ns'] > 0
+        assert 'payload_sha256' not in error and 'fields' not in error
+    else:
+        packets = [row for row in rows if row.get('direction') == 'received']
+        assert [row['name'] for row in packets] == ['pb.UserLoginRSP', 'pb.CardsBRC']
+        assert packets[1]['fields'] == {'uid': 'self', 'card': 52}
+        assert packets[0]['observed_at'] == packets[1]['observed_at']
+        assert packets[0]['monotonic_ns'] == packets[1]['monotonic_ns']
+
+    assert rows[-1]['status'] == 'failed'

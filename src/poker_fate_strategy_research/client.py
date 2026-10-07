@@ -150,8 +150,23 @@ class ProtocolClient:
         if not isinstance(frame, bytes):
             raise ClientError('Expected a binary protocol frame.')
 
-        for packet in unpack(frame):
+        try:
+            packets = unpack(frame)
+        except ValueError as error:
+            self.capture.event(
+                'framing-error',
+                direction='received',
+                observed_at=observed_at,
+                monotonic_ns=monotonic_ns,
+                frame_size=len(frame),
+                error_type=type(error).__name__,
+            )
+            raise ClientError('Received a malformed protocol frame.') from error
+
+        for packet in packets:
             self.capture.packet(packet, 'received', observed_at, monotonic_ns)
+
+        for packet in packets:
             await self.handle(packet)
 
     async def run(self) -> None:
