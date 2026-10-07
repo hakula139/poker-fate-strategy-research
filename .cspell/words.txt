@@ -4,10 +4,14 @@ cspell
 deadnix
 direnv
 envrc
+gameid
 hakula
 hakula139
+holdem
+ingamehistory
 isort
 jadx
+libil2cpp
 markdownlint
 mypy
 nixfmt
@@ -22,8 +26,11 @@ pycache
 pyproject
 pytest
 ruff
+seatid
 statix
+tpl_mult_language
 unitypy
 venv
 xenc
 xxtea
+yidun

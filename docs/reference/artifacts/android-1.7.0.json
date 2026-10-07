@@ -1,0 +1,309 @@
+{
+  "retrieved_date_utc": "2026-10-07",
+  "official_page": "https://www.pokerfate.com/",
+  "download_url": "https://aws.poker-fate.com/dl/PokerFate_Android.apk",
+  "package": {
+    "name": "com.pokerfate.play",
+    "version_name": "1.7.0",
+    "version_code": 33,
+    "minimum_sdk": 28,
+    "target_sdk": 36
+  },
+  "size": 1612525590,
+  "sha256": "b7a77eb04e76013fe50ca4c25ecde1b2d6b8254353ab0d42dd83358417526e20",
+  "http": {
+    "last_modified": "2026-09-28T04:17:12Z",
+    "etag": "89a291b5f85f0fec3d6e728bd4205a8d-193"
+  },
+  "native": {
+    "library": {
+      "apk_entry": "lib/arm64-v8a/libil2cpp.so",
+      "size": 65718944,
+      "sha256": "c823dda716e4584934a513c14c9757b18c9a62b89a8a81b0783085c799864bfb"
+    },
+    "metadata": {
+      "apk_entry": "assets/bin/Data/Managed/Metadata/global-metadata.dat",
+      "version": 31,
+      "size": 12260292,
+      "sha256": "de2e91c53036724aad6394cd38ab6aaa98b4a5336355e1be09284294cc4461e6"
+    },
+    "dumper": {
+      "version": "6.7.46",
+      "archive": "Il2CppDumper-net7-v6.7.46.zip",
+      "sha256": "c7f365347ce6bd816cdf774830e44ac46aea59c391c94f388605667394d6aba2"
+    },
+    "generated": {
+      "dump.cs": "6e186510f8b52601f5423bd66f39271d07477ddbe619908abaa4bc0ba6178ab6",
+      "script.json": "cfff6382e5e9b6e8b4e78f04e7d603488179a213e5927862c3ce80feaaa4cabf"
+    }
+  },
+  "extraction": {
+    "seed_offset": "0x69ae20",
+    "bundle_count": 66,
+    "lua_count": 683,
+    "protocol_count": 8,
+    "asset_count": 691
+  },
+  "sources": [
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092.bundle",
+      "name": "CSGame",
+      "container_path": "Assets/GameRes/Proto/CSGame.proto",
+      "path_id": -8748342373911205136,
+      "encoded": 1,
+      "path": "sources/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092/Assets/GameRes/Proto/CSGame.proto",
+      "size": 39375,
+      "sha256": "fe0c2d283eef54154b4536f8d7be4013b45863a9e537467a5b2e09a8c6e6a258"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092.bundle",
+      "name": "CSGameDef",
+      "container_path": "Assets/GameRes/Proto/CSGameDef.proto",
+      "path_id": -7105741279405099466,
+      "encoded": 1,
+      "path": "sources/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092/Assets/GameRes/Proto/CSGameDef.proto",
+      "size": 20852,
+      "sha256": "a0ca75da12a4246c243fdcd10fe5df8db8f9ec7172ce09c375454f002f5925ac"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092.bundle",
+      "name": "CSHoldem",
+      "container_path": "Assets/GameRes/Proto/CSHoldem.proto",
+      "path_id": 7518568016665486315,
+      "encoded": 1,
+      "path": "sources/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092/Assets/GameRes/Proto/CSHoldem.proto",
+      "size": 8035,
+      "sha256": "6b06fc789b1b3e0f615c5f96172f0010f8e7a9d718b71cea14b160db001b5aec"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app_cdd3905a015670f867fc0598da90a269.bundle",
+      "name": "EnumConfig",
+      "container_path": "Assets/GameRes/src/app/EnumConfig.lua",
+      "path_id": -8261414197871868514,
+      "encoded": 1,
+      "path": "sources/app_cdd3905a015670f867fc0598da90a269/Assets/GameRes/src/app/EnumConfig.lua",
+      "size": 26261,
+      "sha256": "945c54057d28439a4445caa8cb68eb8e886dd0bd87e56a391f0b736061818f11"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/model_a908d6a73c91f157177af9538e9c1959.bundle",
+      "name": "LoginModel",
+      "container_path": "Assets/GameRes/src/app/model/LoginModel.lua",
+      "path_id": 4146542957888489796,
+      "encoded": 1,
+      "path": "sources/model_a908d6a73c91f157177af9538e9c1959/Assets/GameRes/src/app/model/LoginModel.lua",
+      "size": 28305,
+      "sha256": "8b0c4e93779904323421792cd216241178044787d68637ec4cd5210916046538"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/model_a908d6a73c91f157177af9538e9c1959.bundle",
+      "name": "RecordDataModel",
+      "container_path": "Assets/GameRes/src/app/model/RecordDataModel.lua",
+      "path_id": -7594538462719068055,
+      "encoded": 1,
+      "path": "sources/model_a908d6a73c91f157177af9538e9c1959/Assets/GameRes/src/app/model/RecordDataModel.lua",
+      "size": 20085,
+      "sha256": "dd2207aae0f15f0dfebd42711dedbc3cec24009bcc09d2e3d15452856a1b4f8a"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/server_43cf21f4d8c2b88053b7da33fb3967cf.bundle",
+      "name": "GameRoom",
+      "container_path": "Assets/GameRes/src/app/server/GameRoom.lua",
+      "path_id": -4571694824835635783,
+      "encoded": 1,
+      "path": "sources/server_43cf21f4d8c2b88053b7da33fb3967cf/Assets/GameRes/src/app/server/GameRoom.lua",
+      "size": 11583,
+      "sha256": "7c58ce16f17eaaeff17e05cbdb6c10bcc5194518c0b295fdc3a5dd92c5f7ee53"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/server_43cf21f4d8c2b88053b7da33fb3967cf.bundle",
+      "name": "GameServer",
+      "container_path": "Assets/GameRes/src/app/server/GameServer.lua",
+      "path_id": 6568965806608367288,
+      "encoded": 1,
+      "path": "sources/server_43cf21f4d8c2b88053b7da33fb3967cf/Assets/GameRes/src/app/server/GameServer.lua",
+      "size": 16967,
+      "sha256": "3ce7160cf802a41b68e0574cf84d18102759a9c599edb81da1f947b7ce7e8a5e"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/table_2365ef1c60f17f353c87c01bd0a50c4e.bundle",
+      "name": "BaseData",
+      "container_path": "Assets/GameRes/src/app/table/data/BaseData.lua",
+      "path_id": 3686058926205081209,
+      "encoded": 1,
+      "path": "sources/table_2365ef1c60f17f353c87c01bd0a50c4e/Assets/GameRes/src/app/table/data/BaseData.lua",
+      "size": 16517,
+      "sha256": "e625120c3ad1c2ed790f8d991b1bb2683270f177ac9974c36d367960c0695ae6"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/table_2365ef1c60f17f353c87c01bd0a50c4e.bundle",
+      "name": "PKData",
+      "container_path": "Assets/GameRes/src/app/table/data/PKData.lua",
+      "path_id": 3731223570456398194,
+      "encoded": 1,
+      "path": "sources/table_2365ef1c60f17f353c87c01bd0a50c4e/Assets/GameRes/src/app/table/data/PKData.lua",
+      "size": 22260,
+      "sha256": "821fba8c833eec2bd5d2efe32c0f326ff0993ce29bf1b9ec6dc1686907552746"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/table_2365ef1c60f17f353c87c01bd0a50c4e.bundle",
+      "name": "PKRecordData",
+      "container_path": "Assets/GameRes/src/app/table/data/PKRecordData.lua",
+      "path_id": -8361411328308463749,
+      "encoded": 1,
+      "path": "sources/table_2365ef1c60f17f353c87c01bd0a50c4e/Assets/GameRes/src/app/table/data/PKRecordData.lua",
+      "size": 18964,
+      "sha256": "dec65d52542d63b50e4332e4c3d8b39e35a9442911e709dbcb966adeebf7ac8c"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/table_2365ef1c60f17f353c87c01bd0a50c4e.bundle",
+      "name": "PlayerData",
+      "container_path": "Assets/GameRes/src/app/table/data/PlayerData.lua",
+      "path_id": -706417478674224274,
+      "encoded": 1,
+      "path": "sources/table_2365ef1c60f17f353c87c01bd0a50c4e/Assets/GameRes/src/app/table/data/PlayerData.lua",
+      "size": 6571,
+      "sha256": "52d211c660c34fb70602d338378408edf70e860f784e1d5e1998695e92bb99c0"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/table_2365ef1c60f17f353c87c01bd0a50c4e.bundle",
+      "name": "IngameHistory",
+      "container_path": "Assets/GameRes/src/app/table/IngameHistory.lua",
+      "path_id": -3841032099876005753,
+      "encoded": 1,
+      "path": "sources/table_2365ef1c60f17f353c87c01bd0a50c4e/Assets/GameRes/src/app/table/IngameHistory.lua",
+      "size": 10462,
+      "sha256": "0412e25362e2d1a26a711e2171c27c16dcc7de11d1bba61623e029dba58d6c01"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/table_2365ef1c60f17f353c87c01bd0a50c4e.bundle",
+      "name": "PKTable",
+      "container_path": "Assets/GameRes/src/app/table/PK/PKTable.lua",
+      "path_id": -8330407359751951647,
+      "encoded": 1,
+      "path": "sources/table_2365ef1c60f17f353c87c01bd0a50c4e/Assets/GameRes/src/app/table/PK/PKTable.lua",
+      "size": 38557,
+      "sha256": "2482aa0ebb174c53f6b8403a05916edebb018d09ff06c34ae056110bf2e0ba0c"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/views/friendsroom_08574e2ff816d934dbcf99358c881894.bundle",
+      "name": "FriendsRoomOutlook",
+      "container_path": "Assets/GameRes/src/app/views/FriendsRoom/FriendsRoomOutlook.lua",
+      "path_id": -6556467596996135005,
+      "encoded": 1,
+      "path": "sources/friendsroom_08574e2ff816d934dbcf99358c881894/Assets/GameRes/src/app/views/FriendsRoom/FriendsRoomOutlook.lua",
+      "size": 450,
+      "sha256": "5cf7dc65b0748a0fa0f4f67190daa9bd16f5c0cc26324874f9046834bae7a4fb"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/views/lobby_5f9c6bbf71511b868bf14918d2e2e619.bundle",
+      "name": "LobbyByinDialog",
+      "container_path": "Assets/GameRes/src/app/views/Lobby/LobbyByinDialog.lua",
+      "path_id": -367821472399700486,
+      "encoded": 1,
+      "path": "sources/lobby_5f9c6bbf71511b868bf14918d2e2e619/Assets/GameRes/src/app/views/Lobby/LobbyByinDialog.lua",
+      "size": 8044,
+      "sha256": "b5d759ae0b4d78974d6a78b5a4fd02ff0a29eafe1f5b8b887dc79b5c34058026"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/views/login_de711ccf53a2b90c83c44c4dfdc0569e.bundle",
+      "name": "LoginForgotDialog",
+      "container_path": "Assets/GameRes/src/app/views/Login/LoginForgotDialog.lua",
+      "path_id": 2176532665533606152,
+      "encoded": 1,
+      "path": "sources/login_de711ccf53a2b90c83c44c4dfdc0569e/Assets/GameRes/src/app/views/Login/LoginForgotDialog.lua",
+      "size": 7145,
+      "sha256": "8be7c76254c40b985d8c230b6fd370a8ce76cb362e4cc1ca90d0f02a5a90cda8"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/views/login_de711ccf53a2b90c83c44c4dfdc0569e.bundle",
+      "name": "LoginLayer",
+      "container_path": "Assets/GameRes/src/app/views/Login/LoginLayer.lua",
+      "path_id": -8441831416695721669,
+      "encoded": 1,
+      "path": "sources/login_de711ccf53a2b90c83c44c4dfdc0569e/Assets/GameRes/src/app/views/Login/LoginLayer.lua",
+      "size": 14040,
+      "sha256": "7f45f2f2014e426802525536db481b233d7cfd11d6371380dc20c31746cb0a56"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/app/views/login_de711ccf53a2b90c83c44c4dfdc0569e.bundle",
+      "name": "LoginRegisterDialog",
+      "container_path": "Assets/GameRes/src/app/views/Login/LoginRegisterDialog.lua",
+      "path_id": -5931851897137149659,
+      "encoded": 1,
+      "path": "sources/login_de711ccf53a2b90c83c44c4dfdc0569e/Assets/GameRes/src/app/views/Login/LoginRegisterDialog.lua",
+      "size": 4126,
+      "sha256": "be5dde1318048c131775e78879bb0720bc5e1fc1f4e2c6e95f225a9a3425dff8"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src_ebfbd98808dce5c02f270bd6533bfccb.bundle",
+      "name": "Net",
+      "container_path": "Assets/GameRes/src/manager/Net.lua",
+      "path_id": 2454763625513237559,
+      "encoded": 1,
+      "path": "sources/gameres_assets_src_ebfbd98808dce5c02f270bd6533bfccb/Assets/GameRes/src/manager/Net.lua",
+      "size": 11793,
+      "sha256": "71124443cbb5d7d877bad7e5ab2122a05f5f1691cce3adee18b99b2e020a6d11"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/net_d6d22e7af9958f93ca1739f527f97b43.bundle",
+      "name": "net_pk",
+      "container_path": "Assets/GameRes/src/net/net_pk.lua",
+      "path_id": -4951402362098930012,
+      "encoded": 1,
+      "path": "sources/net_d6d22e7af9958f93ca1739f527f97b43/Assets/GameRes/src/net/net_pk.lua",
+      "size": 7803,
+      "sha256": "650215f5bb9dee8c76b06470e089fa8b305b0267731e9bd3dcf6614b6b91666b"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/net_d6d22e7af9958f93ca1739f527f97b43.bundle",
+      "name": "net_table",
+      "container_path": "Assets/GameRes/src/net/net_table.lua",
+      "path_id": 7019785151266379825,
+      "encoded": 1,
+      "path": "sources/net_d6d22e7af9958f93ca1739f527f97b43/Assets/GameRes/src/net/net_table.lua",
+      "size": 17142,
+      "sha256": "cdb04b6e50d03f655d54054e8cfa56fac5af7d6ffe91a9e8cf4b7b1c3067f48c"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/sdk_a3c60353c5840ff27ec3b5b4441168e6.bundle",
+      "name": "SdkHelper",
+      "container_path": "Assets/GameRes/src/sdk/SdkHelper.lua",
+      "path_id": 4191747336968231932,
+      "encoded": 1,
+      "path": "sources/sdk_a3c60353c5840ff27ec3b5b4441168e6/Assets/GameRes/src/sdk/SdkHelper.lua",
+      "size": 6422,
+      "sha256": "b13ae92e60f84243c575d69f8e26e3ed044d270e772caedc7cefe4d823e5b2f7"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/sdk_a3c60353c5840ff27ec3b5b4441168e6.bundle",
+      "name": "YiDunHelper",
+      "container_path": "Assets/GameRes/src/sdk/YiDunHelper.lua",
+      "path_id": 6416198764613929811,
+      "encoded": 1,
+      "path": "sources/sdk_a3c60353c5840ff27ec3b5b4441168e6/Assets/GameRes/src/sdk/YiDunHelper.lua",
+      "size": 2337,
+      "sha256": "64d168b525d0f6fa8cebd990a32cfc0eda027363924e01f8ffd0e131bfff03af"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/tpl_4917b3b040c2a9acea1bfe95497aee32.bundle",
+      "name": "tpl_constdata",
+      "container_path": "Assets/GameRes/src/tpl/tpl_constdata.lua",
+      "path_id": 7326302951360688919,
+      "encoded": 1,
+      "path": "sources/tpl_4917b3b040c2a9acea1bfe95497aee32/Assets/GameRes/src/tpl/tpl_constdata.lua",
+      "size": 4974,
+      "sha256": "d979102fcecf7667f103003486745f20fc152655b4fd75f5b750814e15e7dfc0"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/tpl_4917b3b040c2a9acea1bfe95497aee32.bundle",
+      "name": "tpl_mult_language",
+      "container_path": "Assets/GameRes/src/tpl/tpl_mult_language.lua",
+      "path_id": -2502319806681238765,
+      "encoded": 1,
+      "path": "sources/tpl_4917b3b040c2a9acea1bfe95497aee32/Assets/GameRes/src/tpl/tpl_mult_language.lua",
+      "size": 3678661,
+      "sha256": "38c28bb9af03a52301cacc2febd05470da25c7ce111f2a84d95e8628735bfe99"
+    }
+  ]
+}

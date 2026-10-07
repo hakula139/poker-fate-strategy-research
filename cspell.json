@@ -8,8 +8,31 @@
       "name": "project-words",
       "path": "./.cspell/words.txt",
       "addWords": true
+    },
+    {
+      "name": "known-typos",
+      "path": "./.cspell/typos.txt"
     }
   ],
   "dictionaries": ["project-words"],
-  "ignorePaths": ["flake.lock", "uv.lock"]
+  "ignorePaths": ["flake.lock", "uv.lock"],
+  "overrides": [
+    {
+      "filename": [
+        ".cspell/typos.txt",
+        "cspell.json",
+        "docs/reference/artifacts/android-1.7.0.json"
+      ],
+      "dictionaries": ["known-typos"]
+    },
+    {
+      "filename": [
+        "docs/reference/artifacts/android-1.7.0.md",
+        "docs/research/client-integrity/hidden-card-delivery.md"
+      ],
+      "ignoreRegExpList": [
+        "/\\bLobbyByinDialog(?:\\.lua)?\\b/g"
+      ]
+    }
+  ]
 }
