@@ -84,6 +84,7 @@
               apktool
               binutils
               curl
+              dotnet-runtime_8
               file
               git
               jadx
