@@ -1,0 +1,36 @@
+# Research artifacts
+/artifacts/*
+!/artifacts/README.md
+/data/
+/work/
+/out/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+/dist/
+
+# Nix
+.direnv/
+.pre-commit-config.yaml
+result
+result-*
+
+# Local environment
+.env
+.env.local
+.envrc.local
+.DS_Store
+
+# Assistant state
+.agents/plans/
+.claude/agent-memory-local/
+.claude/plans/
+.claude/settings.local.json
+.claude/worktrees/
+.codex/plans/
