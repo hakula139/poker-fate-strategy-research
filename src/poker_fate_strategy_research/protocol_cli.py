@@ -53,7 +53,7 @@ def add_protocol_commands(
         '--buy-in',
         type=int,
         required=True,
-        help='Training chips, even integer 40 to 400.',
+        help='Training chips, even from 40 to 60 or multiples of 20 from 80 to 400.',
     )
     practice.set_defaults(run=_practice)
 

@@ -181,10 +181,15 @@ def test_invalid_observation_options(
         Observation(duration, login_timeout, room_id, practice)
 
 
-@pytest.mark.parametrize('buy_in', [39, 41, 402])
+@pytest.mark.parametrize('buy_in', [39, 41, 62, 78, 82, 398, 402])
 def test_invalid_training_buy_in(buy_in: int) -> None:
     with pytest.raises(ValueError):
         Practice(buy_in)
+
+
+@pytest.mark.parametrize('buy_in', [40, 42, 60, 80, 100, 400])
+def test_training_buy_in_matches_request(buy_in: int, session: Session) -> None:
+    assert Practice(buy_in).fields(session)['byin_chips'] == buy_in
 
 
 @pytest.mark.parametrize(

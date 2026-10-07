@@ -74,11 +74,11 @@ uv run --no-sync poker-fate-strategy practice \
   --buy-in 40 --output data/training-observation.jsonl --duration 120
 ```
 
-This command changes live training state by requesting a seat with the selected training chips. The implemented request uses game type `40010101`, big blind `2`, currency ID `10100001`, and `wait_blind=true`. Buy-in must be an even integer from `40` to `400`, matching the inspected configuration. The server can reject those values or require additional initialization. Such a result needs investigation before adding requests.
+This command changes live training state by requesting a seat with the selected training chips. The implemented request uses game type `40010101`, big blind `2`, currency ID `10100001`, and `wait_blind=true`. Buy-in must be an even integer from `40` to `60`, or a multiple of `20` from `80` to `400`, matching the inspected UI choices. The server can reject those values or require additional initialization. Such a result needs investigation before adding requests.
 
 `QuickStartRSP` acceptance alone does not establish room readiness. A successful `EnterRoomRSP` with a positive room ID and the expected training type records `room-ready`. An operation that ends before its requested room becomes ready fails. The server may time out a seated player who does not send decisions. Ending the recording closes its transport without explicitly leaving the room, so verify the account's room state afterward in the official client.
 
-The source of these request fields is the [Android 1.7.0 artifact](../reference/artifacts/android-1.7.0.md): `EnumConfig.lua:56,165-168`, `tpl_table_poker_free.lua:8`, and `LobbyByinDialog.lua:44-56`. Guide mode installs a local receiver, while this command always uses the server transport.
+The source of these request fields is the [Android 1.7.0 artifact](../reference/artifacts/android-1.7.0.md): `EnumConfig.lua:56,165-168`, `tpl_table_poker_free.lua:8`, `tpl_constdata.lua:6`, and `LobbyByinDialog.lua:44-56`. Guide mode installs a local receiver, while this command always uses the server transport.
 
 ## Interpret a recording
 

@@ -10,8 +10,11 @@ class Practice:
     buy_in: int
 
     def __post_init__(self) -> None:
-        if not 40 <= self.buy_in <= 400 or self.buy_in % 2:
-            raise InputError('Training buy-in must be an even integer from 40 to 400.')
+        if self.buy_in not in (*range(40, 62, 2), *range(80, 401, 20)):
+            raise InputError(
+                'Training buy-in must be even from 40 to 60 or a multiple of 20 '
+                'from 80 to 400.'
+            )
 
     def fields(self, session: Session) -> dict[str, Any]:
         return {
