@@ -161,19 +161,24 @@ def test_passive_snapshot_and_duration(
 
 
 @pytest.mark.parametrize(
-    'options',
+    'duration,login_timeout,room_id,practice',
     [
-        {'duration': 0},
-        {'duration': float('nan')},
-        {'duration': float('inf')},
-        {'login_timeout': -1},
-        {'room_id': 0},
-        {'room_id': 1, 'practice': Practice(40)},
+        (0, 30, None, None),
+        (float('nan'), 30, None, None),
+        (float('inf'), 30, None, None),
+        (60, -1, None, None),
+        (60, 30, 0, None),
+        (60, 30, 1, Practice(40)),
     ],
 )
-def test_invalid_observation_options(options: dict[str, object]) -> None:
+def test_invalid_observation_options(
+    duration: float,
+    login_timeout: float,
+    room_id: int | None,
+    practice: Practice | None,
+) -> None:
     with pytest.raises(ValueError):
-        Observation(**options)  # type: ignore[arg-type]
+        Observation(duration, login_timeout, room_id, practice)
 
 
 @pytest.mark.parametrize('buy_in', [39, 41, 402])
