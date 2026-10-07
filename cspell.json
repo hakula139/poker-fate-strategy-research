@@ -8,8 +8,12 @@
       "name": "project-words",
       "path": "./.cspell/words.txt",
       "addWords": true
+    },
+    {
+      "name": "known-typos",
+      "path": "./.cspell/typos.txt"
     }
   ],
-  "dictionaries": ["project-words"],
+  "dictionaries": ["project-words", "known-typos"],
   "ignorePaths": ["flake.lock", "uv.lock"]
 }
