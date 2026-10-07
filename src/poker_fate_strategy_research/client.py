@@ -62,6 +62,7 @@ class ProtocolClient:
         self.options = options
         self.logged_in = False
         self.room_id = 0
+        self.snapshot_received = False
 
     async def send(self, name: str, fields: dict[str, Any], room_id: int = 0) -> None:
         packet = Packet(name, room_id, self.schema.encode(name, fields))
@@ -119,6 +120,12 @@ class ProtocolClient:
         if self.room_id <= 0:
             raise ClientError('Room response has no positive room ID.')
 
+        if packet.name == 'pb.GetRoomDataRSP' and self.options.room_id is not None:
+            if self.room_id != self.options.room_id:
+                raise ClientError('Snapshot response belongs to another room.')
+
+            self.snapshot_received = True
+
         if self.options.practice and fields.get('game_type') != 40010101:
             raise ClientError('Server entered a different game type than training.')
 
@@ -128,7 +135,12 @@ class ProtocolClient:
         if not self.logged_in:
             raise ClientError('Observation ended before login succeeded.')
 
-        if (self.options.room_id or self.options.practice) and not self.room_id:
+        if self.options.room_id is not None and not self.snapshot_received:
+            raise ClientError(
+                'Observation ended before the requested snapshot arrived.'
+            )
+
+        if self.options.practice is not None and not self.room_id:
             raise ClientError('Observation ended before the requested room was ready.')
 
     async def _receive(self, timeout: float) -> None:

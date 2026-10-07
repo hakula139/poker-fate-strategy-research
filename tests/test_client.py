@@ -204,6 +204,8 @@ def test_snapshot_rejection_or_missing_response(
         assert (await receive(socket)).name == 'pb.GetRoomDataREQ'
         if room_response is not None:
             await reply(socket, schema, 'pb.GetRoomDataRSP', room_response)
+        else:
+            await reply(socket, schema, 'pb.EnterRoomRSP', {'roomid': 17})
 
         await socket.close()
 

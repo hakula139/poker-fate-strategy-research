@@ -53,6 +53,9 @@ def test_capture_presence_identity_and_redaction(
             'test',
             detail=f'key: {session.rdkey}',
             token='private',
+            owner_name='Identifiable Owner',
+            user_name='Identifiable User',
+            inviter_name='Identifiable Inviter',
             user={'uid': 1234, 'name': 'Identifiable Player'},
         )
 
@@ -70,6 +73,14 @@ def test_capture_presence_identity_and_redaction(
     assert rows[6]['token'] == '[redacted]'
     assert rows[6]['user'] == {'uid': 'self', 'name': '[redacted]'}
     assert rows[0]['name'] == 'pb.CardsBRC'
+    assert all(
+        rows[6][field] == '[redacted]'
+        for field in (
+            'owner_name',
+            'user_name',
+            'inviter_name',
+        )
+    )
 
     other = tmp_path / 'other.jsonl'
     with Capture(other, schema, replace(session, uid=8888)) as capture:
