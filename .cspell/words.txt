@@ -8,14 +8,12 @@ direnv
 Dun
 envrc
 flas
-Hakula
 hakula
 hakula139
 Hold
 Hold'em
 HTProtect
 httpprot
-Il2Cpp
 il2cpp
 jadx
 kktp
