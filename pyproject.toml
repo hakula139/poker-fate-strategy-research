@@ -1,0 +1,55 @@
+[project]
+name = "poker-fate-strategy-research"
+version = "0.1.0"
+description = "Poker Fate research tools"
+requires-python = ">=3.14"
+dependencies = [
+    "UnityPy>=1.25.4",
+    "xxtea>=6.2.0",
+]
+
+[project.scripts]
+poker-fate-strategy = "poker_fate_strategy_research.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.32.4"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/poker_fate_strategy_research"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]
+
+[tool.ruff]
+target-version = "py314"
+src = ["src"]
+
+[tool.ruff.format]
+quote-style = "single"
+line-ending = "lf"
+
+[tool.ruff.lint]
+select = ["B", "C4", "E", "F", "I", "SIM", "UP", "W"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+split-on-trailing-comma = true
+combine-as-imports = true
+
+[tool.mypy]
+files = ["src", "tests"]
+exclude_gitignore = true
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["UnityPy.*", "xxtea"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

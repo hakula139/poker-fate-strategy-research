@@ -28,3 +28,32 @@ jobs:
 
       - name: Check
         run: nix flake check --print-build-logs
+
+  python:
+    name: Python Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint
+        run: uv run --no-sync ruff check
+
+      - name: Format
+        run: uv run --no-sync ruff format --check
+
+      - name: Type check
+        run: uv run --no-sync mypy
+
+      - name: Test
+        run: uv run --no-sync pytest -q
