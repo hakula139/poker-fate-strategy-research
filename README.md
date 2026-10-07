@@ -1,6 +1,6 @@
 # Poker Fate Strategy Research
 
-A private research workspace for Poker Fate strategy and game integrity. The first investigation examines whether an official client receives opponents' hole cards or future community cards before they should be visible.
+A research workspace for Poker Fate strategy and game integrity. The first investigation examines whether an official client receives opponents' hole cards or future community cards before they should be visible.
 
 The repository stores reproducible analysis tools and evidence-backed findings. Downloaded clients, decoded sources, captures, and account credentials remain in ignored local paths.
 
