@@ -89,6 +89,7 @@
               git
               jadx
               jq
+              protobuf
               python314
               ripgrep
               unzip
