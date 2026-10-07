@@ -12,7 +12,3 @@ nix flake check
 ```
 
 `direnv` loads the same environment through `.envrc`. Android resource decoding, Java decompilation, Python tooling, documentation checks, and spelling checks are pinned by the project flake.
-
-## Research
-
-This workspace builds on [poker-fate-research](https://github.com/hakula139/poker-fate-research). Its profile API results are historical context. Current client behavior requires fresh evidence.
