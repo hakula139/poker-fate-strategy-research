@@ -6,6 +6,7 @@ direnv
 envrc
 hakula
 hakula139
+isort
 jadx
 markdownlint
 mypy
@@ -14,10 +15,15 @@ nixos
 nixpkgs
 numtide
 pkgs
+pkproject
+pkproto
 prek
 pycache
 pyproject
 pytest
 ruff
 statix
+unitypy
 venv
+xenc
+xxtea
