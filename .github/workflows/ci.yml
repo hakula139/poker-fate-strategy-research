@@ -29,8 +29,8 @@ jobs:
       - name: Check
         run: nix flake check --print-build-logs
 
-      - name: Test proxy runtime
-        run: nix develop -c uv run --locked pytest -q tests/test_proxy_runtime.py
+      - name: Test
+        run: nix develop -c uv run --locked pytest -q
 
   python:
     name: Python Check
@@ -57,6 +57,3 @@ jobs:
 
       - name: Type check
         run: uv run --no-sync mypy
-
-      - name: Test
-        run: uv run --no-sync pytest -q

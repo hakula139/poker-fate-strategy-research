@@ -16,6 +16,9 @@ import pytest
 from poker_fate_strategy_research.session import Session
 
 
+_PROXY_EXECUTABLE = shutil.which('mitmdump')
+
+
 class LoginHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:
         body = json.dumps(
@@ -89,17 +92,19 @@ def _wait_for_proxy(process: subprocess.Popen[bytes], port: int) -> None:
     pytest.fail('Bundled proxy did not start within 15 seconds.')
 
 
+@pytest.mark.skipif(
+    _PROXY_EXECUTABLE is None,
+    reason='Run inside nix develop to test the bundled proxy runtime.',
+)
 def test_bundled_proxy_captures_local_login(tmp_path: Path) -> None:
-    executable = shutil.which('mitmdump')
-    if executable is None:
-        pytest.skip('Run inside nix develop to test the bundled proxy runtime.')
+    assert _PROXY_EXECUTABLE is not None
 
     output = tmp_path / 'session.json'
     server = ThreadingHTTPServer(('127.0.0.1', 0), LoginHandler)
     worker = threading.Thread(target=server.serve_forever, daemon=True)
     worker.start()
     try:
-        with proxy(executable, output) as port:
+        with proxy(_PROXY_EXECUTABLE, output) as port:
             connection = http.client.HTTPConnection('127.0.0.1', port, timeout=10)
             connection.request(
                 'POST',
