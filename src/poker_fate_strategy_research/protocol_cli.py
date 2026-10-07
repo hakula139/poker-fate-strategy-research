@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import argparse
 import asyncio
-import json
 from pathlib import Path
 
 from .client import Observation, observe
-from .local_files import private_input
+from .errors import InputError
+from .local_files import private_json
 from .practice import Practice
 from .schema import compile_schema
 from .session import Session, import_login
@@ -81,7 +83,7 @@ def _schema(args: argparse.Namespace) -> None:
 
 
 def _session(args: argparse.Namespace) -> None:
-    response = json.loads(private_input(args.response))
+    response = private_json(args.response)
     import_login(response, args.version, args.channel, args.server_index).save(
         args.output
     )
@@ -100,10 +102,18 @@ def _practice(args: argparse.Namespace) -> None:
 
 
 def _record(args: argparse.Namespace, options: Observation) -> None:
+    session = Session.load(args.session)
+    try:
+        descriptors = args.schema.read_bytes()
+    except OSError as error:
+        raise InputError(
+            'Cannot read the protocol schema. Check its path and permissions.'
+        ) from error
+
     asyncio.run(
         observe(
-            Session.load(args.session),
-            args.schema.read_bytes(),
+            session,
+            descriptors,
             args.output,
             options,
         )

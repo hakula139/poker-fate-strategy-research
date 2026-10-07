@@ -12,6 +12,7 @@ from websockets.asyncio.client import ClientConnection, connect
 from websockets.exceptions import ConnectionClosedOK
 
 from .capture import Capture
+from .errors import InputError
 from .packets import Packet, pack, unpack
 from .practice import Practice
 from .schema import Schema
@@ -37,13 +38,13 @@ class Observation:
                 self.login_timeout,
             )
         ):
-            raise ValueError('Observation and login timeouts must be positive.')
+            raise InputError('Observation and login timeouts must be positive.')
 
         if self.room_id is not None and not 0 < self.room_id < 2**31:
-            raise ValueError('Room ID must be a positive int32.')
+            raise InputError('Room ID must be a positive int32.')
 
         if self.room_id is not None and self.practice is not None:
-            raise ValueError('Choose either an existing room or a new training entry.')
+            raise InputError('Choose either an existing room or a new training entry.')
 
 
 class ProtocolClient:

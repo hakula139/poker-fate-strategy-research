@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from poker_fate_strategy_research.errors import InputError
 from poker_fate_strategy_research.session import Session, import_login
 
 
@@ -28,7 +29,7 @@ def test_session_import_and_private_storage(tmp_path: Path) -> None:
     assert 'synthetic-session-key' not in repr(session)
     assert '1234' not in repr(session)
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(InputError, match='already exists'):
         session.save(path)
 
     path.chmod(0o644)

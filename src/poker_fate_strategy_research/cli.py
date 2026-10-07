@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 from .client import ClientError
+from .errors import InputError
 from .extract import extract_apk
 from .protocol_cli import add_protocol_commands
 
@@ -34,12 +35,12 @@ def main() -> None:
     except KeyboardInterrupt:
         print('Interrupted.', file=sys.stderr)
         raise SystemExit(130) from None
-    except ClientError as error:
+    except (ClientError, InputError) as error:
         print(str(error), file=sys.stderr)
         raise SystemExit(1) from None
     except Exception as error:
         print(
-            f'Operation failed ({type(error).__name__}). Check inputs and capture.',
+            f'Unexpected failure ({type(error).__name__}).',
             file=sys.stderr,
         )
         raise SystemExit(1) from None
