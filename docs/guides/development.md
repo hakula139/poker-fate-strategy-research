@@ -28,4 +28,4 @@ uv run --no-sync mypy
 uv run --no-sync pytest -q
 ```
 
-CI runs these commands as `Python Check`. Native repository hooks run separately through `nix flake check`.
+CI runs these commands as `Python Check`. Native repository hooks run separately through `nix flake check`. The Nix job also runs the proxy integration test with the bundled runtime. Run `nix develop -c uv run --locked pytest -q` to include that test locally. Outside the development shell, the test skips when `mitmdump` is unavailable.
