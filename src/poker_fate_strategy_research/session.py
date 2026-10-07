@@ -55,14 +55,15 @@ class Session:
             stream.write('\n')
 
     @classmethod
-    def load(cls, path: Path) -> Session:
+    def load(cls, path: Path) -> 'Session':
         return cls(**json.loads(private_input(path)))
 
 
 def import_login(
     response: dict[str, Any], version: str, channel: int, server_index: int = 0
 ) -> Session:
-    if type(response.get('code')) is not int or response['code'] < 0:
+    code = response.get('code')
+    if type(code) is not int or (code < 0 and code != -6):
         raise ValueError('Official login was not successful.')
 
     try:

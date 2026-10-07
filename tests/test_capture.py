@@ -49,7 +49,12 @@ def test_capture_presence_identity_and_redaction(
             '2026-10-07T00:00:00+00:00',
             123,
         )
-        capture.event('test', detail=f'key: {session.rdkey}', token='private')
+        capture.event(
+            'test',
+            detail=f'key: {session.rdkey}',
+            token='private',
+            user={'uid': 1234, 'name': 'Identifiable Player'},
+        )
 
     text = path.read_text()
     assert session.rdkey not in text
@@ -63,6 +68,8 @@ def test_capture_presence_identity_and_redaction(
     assert rows[4]['decode_status'] == 'unknown-message'
     assert rows[5]['decode_status'] == 'invalid-protobuf'
     assert rows[6]['token'] == '[redacted]'
+    assert rows[6]['user'] == {'uid': 'self', 'name': '[redacted]'}
+    assert rows[0]['name'] == 'pb.CardsBRC'
 
     other = tmp_path / 'other.jsonl'
     with Capture(other, schema, replace(session, uid=8888)) as capture:

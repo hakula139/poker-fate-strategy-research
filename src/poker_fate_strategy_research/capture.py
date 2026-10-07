@@ -17,18 +17,18 @@ from .session import Session
 
 _PRIVATE_FIELDS = {
     'authorization',
+    'email',
+    'imei',
+    'ip',
     'key',
+    'login_ip',
+    'nick',
+    'nickname',
+    'password',
     'rdkey',
     'token',
     'verify',
-    'password',
     'yidun_risk_check',
-    'imei',
-    'ip',
-    'login_ip',
-    'email',
-    'nickname',
-    'nick',
 }
 _AUTH_MESSAGES = {'pb.UserLoginREQ', 'pb.UserLoginRSP'}
 
@@ -65,7 +65,12 @@ class Capture:
             return f'player-{digest[:16]}'
 
         if isinstance(value, dict):
-            return {key: self.redact(item, key) for key, item in value.items()}
+            return {
+                key: '[redacted]'
+                if key == 'name' and 'uid' in value
+                else self.redact(item, key)
+                for key, item in value.items()
+            }
 
         if isinstance(value, list):
             return [self.redact(item, field) for item in value]
@@ -82,7 +87,7 @@ class Capture:
         self,
         packet: Packet,
         direction: Literal['sent', 'received'],
-        received_at: str,
+        observed_at: str,
         monotonic_ns: int,
     ) -> None:
         self.sequence += 1
@@ -90,7 +95,7 @@ class Capture:
             'event': 'packet',
             'sequence': self.sequence,
             'direction': direction,
-            'received_at': received_at,
+            'observed_at': observed_at,
             'monotonic_ns': monotonic_ns,
             'recipient': 'self' if direction == 'received' else 'server',
             'name': packet.name,
@@ -102,7 +107,9 @@ class Capture:
         else:
             record['payload_sha256'] = hashlib.sha256(packet.payload).hexdigest()
             try:
-                record['fields'] = self.schema.decode(packet.name, packet.payload)
+                decoded = self.schema.inspect(packet.name, packet.payload)
+                record['fields'] = decoded.fields
+                record['unknown_fields'] = decoded.unknown_fields
                 record['decode_status'] = 'decoded'
             except KeyError:
                 record['decode_status'] = 'unknown-message'

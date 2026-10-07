@@ -17,6 +17,11 @@ def test_decode_preserves_field_presence_and_dependencies() -> None:
     schema = Schema(FileDescriptorSet(file=[dependent, base]).SerializeToString())
     payload = schema.encode('pb.Room', {'cards': {'cards': [1, 52]}})
     assert schema.decode('pb.Room', payload) == {'cards': {'cards': [1, 52]}}
+    assert not schema.inspect('pb.Room', payload).unknown_fields
+    extended = schema.inspect('pb.Room', payload + b'\x98\x06\x01')
+    assert extended.unknown_fields and extended.fields == schema.decode(
+        'pb.Room', payload
+    )
     assert schema.decode('pb.Room', schema.encode('pb.Room', {'stage': 0})) == {
         'stage': 0
     }

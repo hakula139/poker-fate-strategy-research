@@ -32,6 +32,10 @@ dev = [
 target-version = "py314"
 src = ["src"]
 
+[tool.ruff.per-file-target-version]
+"src/poker_fate_strategy_research/login_proxy.py" = "py313"
+"src/poker_fate_strategy_research/session.py" = "py313"
+
 [tool.ruff.format]
 quote-style = "single"
 line-ending = "lf"
@@ -50,7 +54,7 @@ exclude_gitignore = true
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["UnityPy.*", "xxtea"]
+module = ["UnityPy.*", "mitmproxy.*", "xxtea"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

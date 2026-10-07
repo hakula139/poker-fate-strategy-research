@@ -1,4 +1,5 @@
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -6,6 +7,12 @@ from google.protobuf.descriptor_pb2 import FileDescriptorSet
 from google.protobuf.descriptor_pool import DescriptorPool
 from google.protobuf.json_format import MessageToDict, ParseDict
 from google.protobuf.message_factory import GetMessageClass
+
+
+@dataclass(frozen=True)
+class DecodedMessage:
+    fields: dict[str, Any]
+    unknown_fields: bool
 
 
 class Schema:
@@ -35,11 +42,17 @@ class Schema:
         return message.SerializeToString()
 
     def decode(self, name: str, payload: bytes) -> dict[str, Any]:
+        return self.inspect(name, payload).fields
+
+    def inspect(self, name: str, payload: bytes) -> DecodedMessage:
         descriptor = self.pool.FindMessageTypeByName(name)
         message = GetMessageClass(descriptor).FromString(payload)
-        return MessageToDict(
+        original = message.SerializeToString()
+        fields = MessageToDict(
             message, preserving_proto_field_name=True, use_integers_for_enums=True
         )
+        message.DiscardUnknownFields()
+        return DecodedMessage(fields, original != message.SerializeToString())
 
 
 def compile_schema(directory: Path) -> bytes:
@@ -56,8 +69,11 @@ def compile_schema(directory: Path) -> bytes:
             '--descriptor_set_out=/dev/stdout',
             *files,
         ],
-        check=True,
+        check=False,
         capture_output=True,
     )
+    if result.returncode:
+        raise ValueError('Protocol compilation failed:\n' + result.stderr.decode())
+
     Schema(result.stdout)
     return result.stdout

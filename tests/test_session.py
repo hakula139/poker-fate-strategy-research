@@ -57,3 +57,9 @@ def test_reject_invalid_login(field: str, value: object) -> None:
     response[field] = value
     with pytest.raises(ValueError):
         import_login(response, '1.7.0', 3)
+
+
+def test_import_official_risk_warning_response() -> None:
+    response = login_response()
+    response['code'] = -6
+    assert import_login(response, '1.7.0', 3).uid == 1234

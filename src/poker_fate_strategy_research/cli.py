@@ -1,7 +1,10 @@
 import argparse
+import sys
 from pathlib import Path
 
+from .client import ClientError
 from .extract import extract_apk
+from .protocol_cli import add_protocol_commands
 
 
 def main() -> None:
@@ -18,7 +21,30 @@ def main() -> None:
         required=True,
         help='Seed field offset in global-metadata.dat for this APK build.',
     )
+    extract.set_defaults(run=_extract)
+    add_protocol_commands(commands)
 
     args = parser.parse_args()
+    if args.command in {'extract', 'schema'}:
+        args.run(args)
+        return
+
+    try:
+        args.run(args)
+    except KeyboardInterrupt:
+        print('Interrupted.', file=sys.stderr)
+        raise SystemExit(130) from None
+    except ClientError as error:
+        print(str(error), file=sys.stderr)
+        raise SystemExit(1) from None
+    except Exception as error:
+        print(
+            f'Operation failed ({type(error).__name__}). Check inputs and capture.',
+            file=sys.stderr,
+        )
+        raise SystemExit(1) from None
+
+
+def _extract(args: argparse.Namespace) -> None:
     count = extract_apk(args.apk, args.output, args.seed_offset)
     print(f'Decoded {count} assets. Inventory: {args.output / "inventory.json"}')
