@@ -11,6 +11,7 @@ _PROTO_KEY = b'bee#happy&pkproto'[:16]
 def seed_from_metadata(metadata: bytes, field_offset: int) -> int:
     if field_offset < 0 or field_offset + 8 > len(metadata):
         raise ValueError('Seed field is outside the metadata file')
+
     field = metadata[field_offset : field_offset + 8]
     return int.from_bytes(bytes(value ^ 0x3D for value in field), 'little')
 

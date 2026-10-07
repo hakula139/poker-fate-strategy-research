@@ -41,10 +41,6 @@ lines-after-imports = 2
 split-on-trailing-comma = true
 combine-as-imports = true
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src"]
-
 [tool.mypy]
 files = ["src", "tests"]
 exclude_gitignore = true
@@ -53,3 +49,7 @@ strict = true
 [[tool.mypy.overrides]]
 module = ["UnityPy.*", "xxtea"]
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

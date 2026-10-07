@@ -18,6 +18,7 @@ def main() -> None:
         required=True,
         help='Seed field offset in global-metadata.dat for this APK build.',
     )
+
     args = parser.parse_args()
     count = extract_apk(args.apk, args.output, args.seed_offset)
     print(f'Decoded {count} assets. Inventory: {args.output / "inventory.json"}')
