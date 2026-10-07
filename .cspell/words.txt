@@ -1,5 +1,6 @@
 apktool
 cachix
+chnl
 cspell
 deadnix
 direnv
@@ -8,6 +9,7 @@ gameid
 hakula
 hakula139
 holdem
+imei
 ingamehistory
 isort
 jadx
@@ -25,6 +27,7 @@ prek
 pycache
 pyproject
 pytest
+rdkey
 ruff
 seatid
 statix
