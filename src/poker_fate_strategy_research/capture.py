@@ -5,7 +5,7 @@ import secrets
 import time
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, Self
 
 from google.protobuf.message import DecodeError
 
@@ -44,7 +44,7 @@ class Capture:
         self.salt = secrets.token_bytes(32)
         self.sequence = 0
 
-    def __enter__(self) -> Capture:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *_: object) -> None:

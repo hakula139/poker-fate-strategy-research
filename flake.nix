@@ -91,7 +91,7 @@
               jq
               mitmproxy
               protobuf
-              python314
+              python313
               ripgrep
               unzip
               uv

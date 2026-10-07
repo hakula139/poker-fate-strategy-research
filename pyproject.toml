@@ -2,7 +2,7 @@
 name = "poker-fate-strategy-research"
 version = "0.1.0"
 description = "Poker Fate research tools"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "protobuf>=7.36.2",
     "UnityPy>=1.25.4",
@@ -29,12 +29,8 @@ dev = [
 ]
 
 [tool.ruff]
-target-version = "py314"
+target-version = "py313"
 src = ["src"]
-
-[tool.ruff.per-file-target-version]
-"src/poker_fate_strategy_research/login_proxy.py" = "py313"
-"src/poker_fate_strategy_research/session.py" = "py313"
 
 [tool.ruff.format]
 quote-style = "single"

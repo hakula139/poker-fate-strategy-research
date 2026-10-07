@@ -3,7 +3,7 @@ import json
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 from urllib.parse import urlsplit
 
 from .local_files import private_input, private_output
@@ -55,7 +55,7 @@ class Session:
             stream.write('\n')
 
     @classmethod
-    def load(cls, path: Path) -> 'Session':
+    def load(cls, path: Path) -> Self:
         return cls(**json.loads(private_input(path)))
 
 
