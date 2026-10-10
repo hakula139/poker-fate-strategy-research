@@ -23,6 +23,8 @@ The closed capture is retained locally as `data/runtime/20261011-practice/receiv
 
 The history callbacks arrived at 17:59:44.190 and 17:59:50.310 UTC on the Android clock. They represent two deliveries of one hand, so they are not independent examples of the redaction policy. The user triggered the history panel through the normal UI. The observer did not record outgoing requests, and no separately injected history query was executed.
 
+All 403 metadata-only packets map to 24 known protocol messages. One `SitDownBRC` is a specific coverage gap: its `status` contains `SeatStatus`, whose schema permits `card1..card4` (`CSGame.proto:327-330`, `CSGameDef.proto:258-279`). The schema comment limits those cards to hand comparison, but does not establish server enforcement. That payload was discarded, so this recording cannot establish whether it contained card values. The other metadata-only message schemas contain no explicit playing-card containers. Cosmetic card fields and hand-count statistics are not hole-card values.
+
 This capture does not cover chip tables, controlled observer-role changes, reconnect recovery, or cross-account history access. Metadata-only payloads were not examined, and the downloaded client hot update was not separately decoded. The decoded packets reported no unknown protobuf fields, which supports the selected schema interpretation but does not validate unexamined messages or the full server implementation.
 
 ## Transport and normal delivery
