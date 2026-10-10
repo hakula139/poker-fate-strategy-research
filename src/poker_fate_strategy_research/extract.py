@@ -33,28 +33,32 @@ def _extract_bundle(data: bytes, entry: str, seed: int, output: Path) -> BundleR
 
 
 def extract_apk(apk: Path, output: Path, seed_offset: int) -> int:
-    output.mkdir(parents=True, exist_ok=False)
     with apk.open('rb') as stream:
         apk_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
 
-    bundles = []
     with ZipFile(apk) as archive:
         metadata = archive.read('assets/bin/Data/Managed/Metadata/global-metadata.dat')
         seed = seed_from_metadata(metadata, seed_offset)
-        for entry in archive.namelist():
-            if not entry.endswith('.bundle') or not entry.startswith(
+        entries = [
+            entry
+            for entry in archive.namelist()
+            if entry.endswith('.bundle')
+            and entry.startswith(
                 (
                     'assets/aa/Android/gameres_assets_src/',
                     'assets/aa/Android/gameres_assets_src_',
                     'assets/aa/Android/gameres_assets_proto_',
                 )
-            ):
-                continue
+            )
+        ]
+        if not entries:
+            raise ValueError('No source / protocol bundles found in the APK')
 
-            bundles.append(_extract_bundle(archive.read(entry), entry, seed, output))
-
-    if not bundles:
-        raise ValueError('No source / protocol bundles found in the APK')
+        output.mkdir(parents=True, exist_ok=False)
+        bundles = [
+            _extract_bundle(archive.read(entry), entry, seed, output)
+            for entry in entries
+        ]
 
     inventory = {
         'apk_sha256': apk_hash,

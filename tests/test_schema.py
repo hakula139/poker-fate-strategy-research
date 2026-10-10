@@ -37,3 +37,17 @@ def test_missing_dependency() -> None:
     file = FileDescriptorProto(name='room.proto', dependency=['missing.proto'])
     with pytest.raises(ValueError, match='dependencies'):
         Schema(FileDescriptorSet(file=[file]).SerializeToString())
+
+
+def test_decode_rejects_nested_missing_required_field() -> None:
+    file = FileDescriptorProto(name='required.proto', package='pb', syntax='proto2')
+    child = file.message_type.add(name='Cards')
+    child.field.add(name='card', number=1, type=5, label=2)
+    room = file.message_type.add(name='Room')
+    room.field.add(name='cards', number=1, type=11, type_name='.pb.Cards', label=1)
+    schema = Schema(FileDescriptorSet(file=[file]).SerializeToString())
+
+    with pytest.raises(DecodeError, match='required fields'):
+        schema.inspect('pb.Room', b'\x0a\x00')
+
+    assert schema.decode('pb.Room', b'\x0a\x02\x08\x34') == {'cards': {'card': 52}}

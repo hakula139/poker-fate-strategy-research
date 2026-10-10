@@ -6,7 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from poker_fate_strategy_research import cli
+from poker_fate_strategy_research import cli, protocol_cli
+from poker_fate_strategy_research.client import Observation
 from poker_fate_strategy_research.session import Session
 
 
@@ -179,6 +180,60 @@ def test_invalid_session_files_have_safe_feedback(
     )
     assert message in output
     assert 'synthetic-secret' not in output
+
+
+@pytest.mark.parametrize(
+    'arguments,message',
+    [
+        (['extract', 'missing', '--seed-offset', '0'], 'Check paths and permissions'),
+        (['schema', 'missing'], 'No protobuf sources found'),
+    ],
+)
+def test_static_commands_have_corrective_feedback(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    arguments: list[str],
+    message: str,
+) -> None:
+    output = failure(
+        [*arguments, '--output', str(tmp_path / 'output')], monkeypatch, capsys
+    )
+    assert message in output and 'Traceback' not in output
+    assert not (tmp_path / 'output').exists()
+
+
+def test_connection_failure_is_not_reported_as_a_file_error(
+    tmp_path: Path,
+    session: Session,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    async def fail(
+        session: Session, descriptors: bytes, output: Path, options: Observation
+    ) -> None:
+        raise ConnectionRefusedError(session.rdkey)
+
+    monkeypatch.setattr(protocol_cli, 'observe', fail)
+    source = tmp_path / 'session.json'
+    session.save(source)
+    schema = tmp_path / 'schema.pb'
+    schema.write_bytes(b'')
+    output = failure(
+        [
+            'observe',
+            '--session',
+            str(source),
+            '--schema',
+            str(schema),
+            '--output',
+            str(tmp_path / 'capture.jsonl'),
+        ],
+        monkeypatch,
+        capsys,
+    )
+    assert 'ConnectionRefusedError' in output
+    assert 'paths and permissions' not in output and session.rdkey not in output
 
 
 @pytest.mark.parametrize(

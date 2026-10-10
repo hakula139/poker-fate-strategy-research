@@ -6,7 +6,10 @@ from typing import Any
 from google.protobuf.descriptor_pb2 import FileDescriptorSet
 from google.protobuf.descriptor_pool import DescriptorPool
 from google.protobuf.json_format import MessageToDict, ParseDict
+from google.protobuf.message import DecodeError
 from google.protobuf.message_factory import GetMessageClass
+
+from .errors import InputError
 
 
 @dataclass(frozen=True)
@@ -47,6 +50,9 @@ class Schema:
     def inspect(self, name: str, payload: bytes) -> DecodedMessage:
         descriptor = self.pool.FindMessageTypeByName(name)
         message = GetMessageClass(descriptor).FromString(payload)
+        if not message.IsInitialized():
+            raise DecodeError('Protocol message is missing required fields.')
+
         original = message.SerializeToString()
         fields = MessageToDict(
             message, preserving_proto_field_name=True, use_integers_for_enums=True
@@ -59,7 +65,7 @@ def compile_schema(directory: Path) -> bytes:
     directory = directory.resolve()
     files = sorted(path.name for path in directory.glob('*.proto'))
     if not files:
-        raise ValueError('No protobuf sources found.')
+        raise InputError('No protobuf sources found. Check the source directory.')
 
     result = subprocess.run(
         [
@@ -73,7 +79,7 @@ def compile_schema(directory: Path) -> bytes:
         capture_output=True,
     )
     if result.returncode:
-        raise ValueError('Protocol compilation failed:\n' + result.stderr.decode())
+        raise InputError('Protocol compilation failed:\n' + result.stderr.decode())
 
     Schema(result.stdout)
     return result.stdout

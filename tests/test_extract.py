@@ -2,7 +2,7 @@ import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
-from zipfile import ZipFile
+from zipfile import BadZipFile, ZipFile
 
 import pytest
 import UnityPy
@@ -118,3 +118,27 @@ def test_extract_apk_preserves_sources_and_records_provenance(
     with pytest.raises(FileExistsError):
         extract_apk(apk, output, 6)
     assert (output / 'sources/example/src/ui/init.lua').read_bytes() == b'return "ui"'
+
+
+@pytest.mark.parametrize(
+    'invalid_input', ['missing', 'archive', 'metadata', 'seed', 'sources']
+)
+def test_invalid_apk_does_not_reserve_output(
+    tmp_path: Path, invalid_input: str
+) -> None:
+    apk = tmp_path / 'client.apk'
+    if invalid_input == 'archive':
+        apk.write_bytes(b'not an APK')
+    elif invalid_input in {'metadata', 'seed', 'sources'}:
+        with ZipFile(apk, 'w') as archive:
+            if invalid_input in {'seed', 'sources'}:
+                archive.writestr(
+                    'assets/bin/Data/Managed/Metadata/global-metadata.dat',
+                    b'short' if invalid_input == 'seed' else bytes(14),
+                )
+
+    output = tmp_path / 'decoded'
+    with pytest.raises((OSError, BadZipFile, KeyError, ValueError)):
+        extract_apk(apk, output, 6)
+
+    assert not output.exists()
