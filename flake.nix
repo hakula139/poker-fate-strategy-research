@@ -185,6 +185,8 @@
               '';
             };
 
+            python = pkgs.mkShell pythonEnvironment;
+
             default = pkgs.mkShell (
               pythonEnvironment
               // {
@@ -208,8 +210,6 @@
                 inherit (preCommitCheck) shellHook;
               }
             );
-
-            python = pkgs.mkShell pythonEnvironment;
           };
 
           formatter = pkgs.nixfmt-tree;
