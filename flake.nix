@@ -150,6 +150,7 @@
                 inherit (preCommitCheck) shellHook;
               }
             );
+
             android = pkgs.mkShell {
               packages = [
                 androidSdk
@@ -165,7 +166,7 @@
                 export ANDROID_EMULATOR_HOME="$ANDROID_USER_HOME"
                 export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
                 mkdir -p "$ANDROID_AVD_HOME"
-                  chmod 700 "$ANDROID_USER_HOME" "$ANDROID_AVD_HOME"
+                chmod 700 "$ANDROID_USER_HOME" "$ANDROID_AVD_HOME"
               '';
             };
           };
