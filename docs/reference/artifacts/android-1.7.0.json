@@ -304,6 +304,22 @@
       "path": "sources/tpl_4917b3b040c2a9acea1bfe95497aee32/Assets/GameRes/src/tpl/tpl_mult_language.lua",
       "size": 3678661,
       "sha256": "38c28bb9af03a52301cacc2febd05470da25c7ce111f2a84d95e8628735bfe99"
+    },
+    {
+      "apk_entry": "assets/aa/Android/gameres_assets_src/tpl_4917b3b040c2a9acea1bfe95497aee32.bundle",
+      "name": "tpl_table_poker_free",
+      "container_path": "Assets/GameRes/src/tpl/tpl_table_poker_free.lua",
+      "path_id": -8086127516574614567,
+      "encoded": 1,
+      "path": "sources/tpl_4917b3b040c2a9acea1bfe95497aee32/Assets/GameRes/src/tpl/tpl_table_poker_free.lua",
+      "size": 745,
+      "sha256": "dbc0d05b897aa4099634ecbe18669ef45b54715e0bd42a3b64f1a762df4516af"
     }
-  ]
+  ],
+  "distribution_check": {
+    "checked_at_utc": "2026-10-10T09:51:48.811103+00:00",
+    "method": "HEAD",
+    "status": 304,
+    "etag": "89a291b5f85f0fec3d6e728bd4205a8d-193"
+  }
 }
