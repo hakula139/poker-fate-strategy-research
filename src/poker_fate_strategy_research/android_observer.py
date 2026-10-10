@@ -37,6 +37,7 @@ _MESSAGES = {
     'pb.RoundStartBRC',
     'pb.ShowHandRSP',
     'pb.ShowMyCardBRC',
+    'pb.SitDownBRC',
     'pb.WinnerRSP',
 }
 _NUMBERS = {
@@ -98,6 +99,7 @@ _CONTAINERS = {
     'seat',
     'show_round_rd',
     'start_info',
+    'status',
     'table_status',
     'users',
     'winner',
