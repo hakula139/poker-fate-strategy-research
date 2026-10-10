@@ -148,11 +148,17 @@ def handler(state: SignIn) -> type[BaseHTTPRequestHandler]:
                     payload.get('csrf'), str
                 ):
                     raise ValueError
+                if self.path == '/captcha-token' and isinstance(
+                    payload.get('token'), str
+                ):
+                    payload['token'].encode()
             except (ValueError, UnicodeError):
                 self.respond('Invalid input', 400)
                 return
             with state.lock:
-                if not hmac.compare_digest(payload['csrf'], state.csrf):
+                if not payload['csrf'].isascii() or not hmac.compare_digest(
+                    payload['csrf'], state.csrf
+                ):
                     self.respond('Rejected request', 403)
                     return
                 if self.path == '/captcha-token':

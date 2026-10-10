@@ -81,7 +81,7 @@ def _run(args: argparse.Namespace) -> None:
         print(f'Local STOVE sign-in: {state.origin}', flush=True)
         print(f'Verification window: {bundle}', flush=True)
         if not args.no_open:
-            subprocess.run(['open', str(bundle)], check=True)
+            subprocess.run(['open', '-n', str(bundle)], check=True)
         server.serve_forever()
     finally:
         server.server_close()

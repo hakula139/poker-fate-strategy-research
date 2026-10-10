@@ -230,3 +230,52 @@ def test_http_rejects_foreign_origin_before_saving(
             == 403
         )
         assert not path.exists()
+
+
+@pytest.mark.parametrize(
+    ('route', 'content_type', 'body'),
+    [
+        (
+            '/login',
+            'application/x-www-form-urlencoded',
+            urlencode({'csrf': '\u00e9', 'email': 'a', 'password': 'b'}),
+        ),
+        (
+            '/captcha-token',
+            'application/json',
+            json.dumps({'csrf': '\u00e9', 'token': 'synthetic-captcha'}),
+        ),
+        (
+            '/captcha-token',
+            'application/json',
+            json.dumps({'csrf': '\ud800', 'token': 'synthetic-captcha'}),
+        ),
+    ],
+)
+def test_http_rejects_non_ascii_nonce(
+    tmp_path: Path,
+    route: str,
+    content_type: str,
+    body: str,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    path = tmp_path / '.env.local'
+    state = SignIn(path)
+    with local_server(state) as port:
+        assert post(port, route, body, content_type)[0] == 403
+        assert state.phase == 'credentials'
+        assert not path.exists()
+    assert capsys.readouterr().err == ''
+
+
+def test_http_rejects_invalid_unicode_token_before_authentication(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    state = SignIn(tmp_path / '.env.local')
+    state.phase = 'captcha'
+    with local_server(state) as port:
+        body = json.dumps({'csrf': state.csrf, 'token': '\ud800'})
+        assert post(port, '/captcha-token', body, 'application/json')[0] == 400
+        assert state.phase == 'captcha'
+    assert capsys.readouterr().err == ''

@@ -26,8 +26,8 @@ mypy
 nixfmt
 nixos
 nixpkgs
-numtide
 nsurl
+numtide
 o_creat
 o_wronly
 onstove
