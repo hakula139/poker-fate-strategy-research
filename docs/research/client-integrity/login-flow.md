@@ -1,6 +1,6 @@
 # Official login flow
 
-The decoded Android 1.7.0 client exposes an email-and-password login flow that waits for a native device-risk token before sending its login request. Static inspection identifies the client-side sequence, but does not establish a working script-only login for an existing account. No existing-account login, verification-code delivery or password-recovery requests were made. The guest request result is recorded under [runtime authentication status](#runtime-authentication-status).
+The decoded Android 1.7.0 client exposes an email-and-password login flow that waits for a native device-risk token before sending its login request. Official Android email login succeeded for a user-authorized existing account in the isolated emulator during the 2026-10-10 UTC runtime session. This does not establish a working script-only login. No registration verification-code delivery or password-recovery requests were made. The guest request result and official-client outcome are recorded under [runtime authentication status](#runtime-authentication-status).
 
 The source belongs to the [Android 1.7.0 artifact](../../reference/artifacts/android-1.7.0.md). Its [machine-readable record](../../reference/artifacts/android-1.7.0.json) records the artifact hashes. Line references below refer to the decoded Lua files and the generated native method map for that artifact.
 
@@ -28,4 +28,6 @@ Provider selection depends on platform and distribution channel. `LoginLayer.lua
 
 A guest HTTP request on 2026-10-07 at 11:00:27 UTC, using a fresh local device identifier and omitting the native risk report, returned code `-5`. It issued no session. This establishes that the tested request shape was rejected, while the contribution of the device identifier, risk report and server policy remains unresolved.
 
-The [protocol client](../../guides/protocol-client.md) imports a session from an official login response and performs the WebSocket handshake separately. Its response-capture addon and transport have passed local simulated tests. Official-client proxy compatibility, live session reuse and server training entry remain unverified until a user completes official authentication.
+The official Android client subsequently completed its normal email login and entered the free practice table. Live native receive callbacks confirm gameplay delivery to that client. Credentials, account identifiers, and authentication responses remain excluded from the research documents and receive recordings. The [practice-table observations](hidden-card-delivery.md#practice-table-runtime-observations) describe the capture method and its limits.
+
+The [protocol client](../../guides/protocol-client.md) imports a session from an official login response and performs the WebSocket handshake separately. Its response-capture addon and transport have passed local simulated tests. Official-client proxy compatibility, live session reuse, and training entry through that separate client remain unverified. The runtime session used the official client's existing connection.

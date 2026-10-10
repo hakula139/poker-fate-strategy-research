@@ -42,4 +42,4 @@ Research citations use decoded filenames and one-based line ranges. The JSON rec
 
 One cited upstream class is named `LobbyByinDialog`. Its spelling is retained in evidence identifiers. The apparent intended spelling is "buy-in", and it is treated as an upstream typo in the spelling configuration.
 
-The client sources establish client behavior and message schemas. Production delivery permissions, server implementation, and actual account behavior were not observed.
+The client sources establish client behavior and message schemas. The subsequent [practice-table observations](../../research/client-integrity/hidden-card-delivery.md#practice-table-runtime-observations) record live delivery in a limited runtime session. They do not establish production-wide delivery permissions or the server implementation.

@@ -2,9 +2,28 @@
 
 ## Evidence and conclusion
 
-The reported symptom is an opponent apparently knowing private hole cards or community cards before reveal. No live hand, packet capture, or server implementation was available. Static analysis confirms where disclosed cards enter client memory and identifies server boundaries to audit. It does not establish that ordinary players receive opponents' unrevealed cards or future betting-street cards.
+The reported symptom is an opponent apparently knowing private hole cards or community cards before reveal. Static analysis identifies the client delivery paths. Runtime observation on 2026-10-10 UTC adds evidence from the official client in a free practice table: early showdown packets followed all-in actions and round closure, and two history responses returned one completed hand with other seats' cards omitted. These observations do not establish an unauthorized disclosure, and their scope does not rule out the reported behavior in other rooms or interfaces. No production server implementation was available.
 
 The source belongs to the [Android 1.7.0 artifact](../../reference/artifacts/android-1.7.0.md). The [artifact record](../../reference/artifacts/android-1.7.0.json) maps decoded filenames to source locations and hashes. Citations use one-based line ranges in those decoded files.
+
+## Practice-table runtime observations
+
+The user signed in normally and controlled the official Android client in an isolated API 36 ARM64 emulator. The observed table was the free Hold'em practice mode. Frida 17.23.3 intercepted `WebSocketManager.OnWebSocketBinaryRecv` at RVA `0x1b0985c` in the hash-verified native library. The [receive hook](../../../src/poker_fate_strategy_research/android/receive.js) copies decrypted receive callbacks to the [collector](../../../src/poker_fate_strategy_research/android_observer.py), which decodes selected gameplay messages and omits authentication and identity fields before storage. The observer sends no requests. Network PCAP traffic was encrypted, so these findings depend on the native receive capture.
+
+The closed capture is retained locally as `data/runtime/20261011-practice/receive-frida-17.23.3.jsonl`, with hashes and recording context in `receive-frida-17.23.3-provenance.json` beside it. It contains 1,044 packets, including 641 decoded packets and 403 metadata-only packets. Card ownership is the `HandCardRSP.seatid` label, not independently authenticated account identity. Hand references use a per-recording HMAC of the received game ID. The `observed_deal_sequence` counter marks received dealer events and is not a server hand ID. Receive timestamps use the Android clock, while storage timestamps use the host clock. Use packet order and matching hand references for the findings below.
+
+| Observation | Evidence | Supported conclusion |
+| --- | --- | --- |
+| Private-card messages | 26 `HandCardRSP` events each contain two card fields and one owner-seat label. | These messages identify one card-owning seat per event. This alone does not establish the connection's account role or a broadcast policy. |
+| Community-card messages | 68 `RoundStartBRC` events contain 0 cards at stage 1 (26 events), 3 at stage 2 (18 events), and 1 at stages 3 and 4 (13 and 11 events). | The examined round-start messages deliver the expected incremental board lengths. |
+| Early showdown cards | Deals 1, 5, and 6 contain all-in actions before round closure at sequences 48, 163, and 198, followed by `ShowHandRSP` at sequences 49, 164, and 199. Flop, turn, and river messages follow. | The three early reveals are consistent with all-in runouts after the betting round closed. Receiving showdown cards before the final board animation does not by itself show a disclosure during an open decision. |
+| River showdown cards | Four further `ShowHandRSP` events, in deals 7, 9, 22, and 25, follow the river and round closure. | The observed ordering is consistent with ordinary showdown delivery. |
+| Latest-hand history | Responses at sequences 940 and 949 match the hand reference from dealer sequence 863, deal 24. That hand has a winner message at sequence 909, and deal 25 starts at sequence 911 before either history response. | Two queries returned the same completed hand during the next hand. They did not return the current hand. |
+| History redaction | Only the seat-4 row contains two cards, matching its earlier `HandCardRSP` at sequence 866. That row is folded. The other rows contain no card values. | These responses add no card values beyond the pair already received for seat 4 in this hand. |
+
+The history callbacks arrived at 17:59:44.190 and 17:59:50.310 UTC on the Android clock. They represent one hand queried twice, so they are not independent examples of the redaction policy. The user triggered the history panel through the normal UI. The observer did not record outgoing requests, and no separately injected history query was executed.
+
+This capture does not cover chip tables, controlled observer-role changes, reconnect recovery, or cross-account history access. Metadata-only payloads were not examined, and the downloaded client hot update was not separately decoded. The decoded packets reported no unknown protobuf fields, which supports the selected schema interpretation but does not validate unexamined messages or the full server implementation.
 
 ## Transport and normal delivery
 
@@ -50,4 +69,4 @@ To establish a leak, capture delivery timestamps and relevant card fields during
 
 ## Status
 
-This static audit is complete. Production exploitability, actual spectator delay, recipient filtering, and the reported opponent's method remain unverified. No live requests were made.
+The static audit and this practice-table capture identify delivery paths and demonstrate limited live behavior. No unauthorized card delivery was identified in the examined events. Production exploitability, spectator delay, recovery filtering, and the reported opponent's method remain unverified. Normal login, gameplay, and history requests occurred through the official client. Independently issuing requests through the research client remains unverified.

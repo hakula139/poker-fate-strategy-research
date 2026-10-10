@@ -12,6 +12,7 @@ fstat
 gameid
 hakula
 hakula139
+hmac
 holdem
 imei
 ingamehistory
