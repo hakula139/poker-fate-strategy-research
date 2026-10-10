@@ -10,6 +10,9 @@ dependencies = [
     "xxtea>=6.2.0",
 ]
 
+[project.optional-dependencies]
+android = ["frida==17.5.1"]
+
 [project.scripts]
 poker-fate-strategy = "poker_fate_strategy_research.cli:main"
 

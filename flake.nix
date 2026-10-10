@@ -66,19 +66,19 @@
 
           androidSdk =
             (androidPkgs.androidenv.composeAndroidPackages {
-              cmdLineToolsVersion = "20.0";
-              toolsVersion = null;
-              platformToolsVersion = "37.0.0";
-              buildToolsVersions = [ "36.0.0" ];
-              platformVersions = [ "36" ];
-              includeEmulator = true;
-              emulatorVersion = "36.5.11";
-              includeSystemImages = true;
-              systemImageTypes = [ "default" ];
               abiVersions = [
                 (if pkgs.stdenv.hostPlatform.isAarch64 then "arm64-v8a" else "x86_64")
               ];
+              buildToolsVersions = [ "36.0.0" ];
+              cmdLineToolsVersion = "20.0";
+              emulatorVersion = "36.5.11";
               includeCmake = false;
+              includeEmulator = true;
+              includeSystemImages = true;
+              platformToolsVersion = "37.0.0";
+              platformVersions = [ "36" ];
+              systemImageTypes = [ "default" ];
+              toolsVersion = null;
             }).androidsdk;
 
           # ----------------------------------------------------------------------
@@ -125,7 +125,25 @@
           checks.pre-commit = preCommitCheck;
 
           devShells = {
-            python = pkgs.mkShell pythonEnvironment;
+            android = pkgs.mkShell {
+              packages = [
+                androidSdk
+                pkgs.frida-tools
+                pkgs.jdk17
+              ];
+
+              ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+              ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+              JAVA_HOME = "${pkgs.jdk17.home}";
+
+              shellHook = ''
+                export ANDROID_USER_HOME="$PWD/work/android-runtime"
+                export ANDROID_EMULATOR_HOME="$ANDROID_USER_HOME"
+                export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+                mkdir -p "$ANDROID_AVD_HOME"
+                chmod 700 "$ANDROID_USER_HOME" "$ANDROID_AVD_HOME"
+              '';
+            };
 
             default = pkgs.mkShell (
               pythonEnvironment
@@ -151,24 +169,7 @@
               }
             );
 
-            android = pkgs.mkShell {
-              packages = [
-                androidSdk
-                pkgs.jdk17
-              ];
-
-              ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
-              ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
-              JAVA_HOME = "${pkgs.jdk17.home}";
-
-              shellHook = ''
-                export ANDROID_USER_HOME="$PWD/work/android-runtime"
-                export ANDROID_EMULATOR_HOME="$ANDROID_USER_HOME"
-                export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
-                mkdir -p "$ANDROID_AVD_HOME"
-                chmod 700 "$ANDROID_USER_HOME" "$ANDROID_AVD_HOME"
-              '';
-            };
+            python = pkgs.mkShell pythonEnvironment;
           };
 
           formatter = pkgs.nixfmt-tree;
