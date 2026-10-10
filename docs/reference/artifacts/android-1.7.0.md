@@ -14,7 +14,7 @@ This reference identifies the official Android package inspected on 2026-10-07 U
 - HTTP Last-Modified: `2026-09-28T04:17:12Z`.
 - HTTP ETag: `89a291b5f85f0fec3d6e728bd4205a8d-193`.
 
-The ETag is a multipart object identifier. It is recorded separately from the package hash. The download URL identifies a mutable distribution endpoint, so the findings apply to the recorded bytes.
+The ETag is a multipart object identifier. It is recorded separately from the package hash. A conditional HEAD request on 2026-10-10 UTC returned HTTP `304` for that ETag, and the retained package still matched its recorded size and SHA-256. The download URL identifies a mutable distribution endpoint, so the findings apply to the recorded bytes.
 
 ## Decoding parameters
 

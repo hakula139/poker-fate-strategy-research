@@ -2,11 +2,20 @@ import asyncio
 import json
 from dataclasses import replace
 from pathlib import Path
+from unittest.mock import AsyncMock, Mock
 
 import pytest
+from google.protobuf.descriptor_pb2 import FieldDescriptorProto, FileDescriptorSet
+from websockets.asyncio.client import ClientConnection
 from websockets.asyncio.server import ServerConnection, serve
 
-from poker_fate_strategy_research.client import ClientError, Observation, observe
+from poker_fate_strategy_research.capture import Capture
+from poker_fate_strategy_research.client import (
+    ClientError,
+    Observation,
+    ProtocolClient,
+    observe,
+)
 from poker_fate_strategy_research.packets import Packet, pack, unpack
 from poker_fate_strategy_research.practice import Practice
 from poker_fate_strategy_research.schema import Schema
@@ -124,6 +133,100 @@ def test_rejected_login_has_no_room_requests(
     assert [row['name'] for row in rows if row.get('direction') == 'sent'] == [
         'pb.UserLoginREQ',
     ]
+    assert rows[-1]['status'] == 'failed'
+
+
+@pytest.mark.parametrize(
+    'blocked_message,duration,login_timeout',
+    [
+        ('pb.UserLoginREQ', 0.02, 1),
+        ('pb.UserLoginREQ', 1, 0.02),
+        ('pb.QuickStartREQ', 0.02, 1),
+    ],
+)
+def test_blocked_sends_respect_deadlines(
+    tmp_path: Path,
+    descriptors: bytes,
+    session: Session,
+    blocked_message: str,
+    duration: float,
+    login_timeout: float,
+) -> None:
+    schema = Schema(descriptors)
+    socket = Mock(spec=ClientConnection)
+
+    async def send(frame: bytes) -> None:
+        if unpack(frame)[0].name == blocked_message:
+            await asyncio.Future[None]()
+
+    socket.send = AsyncMock(side_effect=send)
+    socket.recv = AsyncMock(
+        return_value=pack(
+            Packet('pb.UserLoginRSP', 0, schema.encode('pb.UserLoginRSP', {}))
+        )
+    )
+    options = Observation(duration, login_timeout, practice=Practice(40))
+
+    async def run() -> None:
+        with Capture(tmp_path / 'capture.jsonl', schema, session) as capture:
+            client = ProtocolClient(socket, schema, session, capture, options)
+            with pytest.raises(ClientError, match='send timed out'):
+                await asyncio.wait_for(client.run(), timeout=0.5)
+
+    asyncio.run(run())
+    rows = [
+        json.loads(line)
+        for line in (tmp_path / 'capture.jsonl').read_text().splitlines()
+    ]
+    assert not any(row.get('name') == blocked_message for row in rows)
+
+
+def test_missing_required_fields_preserve_later_packets(
+    tmp_path: Path, descriptors: bytes, session: Session
+) -> None:
+    files = FileDescriptorSet.FromString(descriptors)
+    cards = next(
+        message for message in files.file[0].message_type if message.name == 'CardsBRC'
+    )
+    next(
+        field for field in cards.field if field.name == 'card'
+    ).label = FieldDescriptorProto.LABEL_REQUIRED
+    descriptors = files.SerializeToString()
+    schema = Schema(descriptors)
+    frame = pack(Packet('pb.CardsBRC', 27, b''))
+    frame += pack(Packet('pb.CardsBRC', 27, schema.encode('pb.CardsBRC', {'card': 52})))
+    frame += pack(
+        Packet('pb.UserLoginRSP', 0, schema.encode('pb.UserLoginRSP', {'code': -1}))
+    )
+
+    async def server(socket: ServerConnection) -> None:
+        await receive(socket)
+        await socket.send(frame)
+        await socket.wait_closed()
+
+    async def run() -> None:
+        async with serve(server, '127.0.0.1', 0) as listener:
+            port = listener.sockets[0].getsockname()[1]
+            with pytest.raises(ClientError, match='login rejected'):
+                await observe(
+                    replace(session, server_url=f'ws://127.0.0.1:{port}'),
+                    descriptors,
+                    tmp_path / 'capture.jsonl',
+                    Observation(),
+                )
+
+    asyncio.run(run())
+    rows = [
+        json.loads(line)
+        for line in (tmp_path / 'capture.jsonl').read_text().splitlines()
+    ]
+    packets = [row for row in rows if row.get('direction') == 'received']
+    assert [row['decode_status'] for row in packets] == [
+        'invalid-protobuf',
+        'decoded',
+        'authentication-omitted',
+    ]
+    assert packets[1]['fields'] == {'card': 52}
     assert rows[-1]['status'] == 'failed'
 
 

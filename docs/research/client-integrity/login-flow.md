@@ -1,6 +1,6 @@
 # Official login flow
 
-The decoded Android 1.7.0 client exposes an email-and-password login flow that waits for a native device-risk token before sending its login request. Static inspection identifies the client-side sequence, but does not establish a working script-only login for an existing account. No account login, verification-code delivery or password-recovery requests were made during this investigation.
+The decoded Android 1.7.0 client exposes an email-and-password login flow that waits for a native device-risk token before sending its login request. Static inspection identifies the client-side sequence, but does not establish a working script-only login for an existing account. No existing-account login, verification-code delivery or password-recovery requests were made. The guest request result is recorded under [runtime authentication status](#runtime-authentication-status).
 
 The source belongs to the [Android 1.7.0 artifact](../../reference/artifacts/android-1.7.0.md). Its [machine-readable record](../../reference/artifacts/android-1.7.0.json) records the artifact hashes. Line references below refer to the decoded Lua files and the generated native method map for that artifact.
 

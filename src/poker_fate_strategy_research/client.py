@@ -64,10 +64,18 @@ class ProtocolClient:
         self.logged_in = False
         self.room_id = 0
         self.snapshot_received = False
+        self._end: float | None = None
+        self._login_deadline: float | None = None
 
     async def send(self, name: str, fields: dict[str, Any], room_id: int = 0) -> None:
         packet = Packet(name, room_id, self.schema.encode(name, fields))
-        await self.socket.send(pack(packet))
+        deadline = self._end if self.logged_in else self._login_deadline
+        try:
+            async with asyncio.timeout_at(deadline):
+                await self.socket.send(pack(packet))
+        except TimeoutError as error:
+            raise ClientError('Protocol send timed out.') from error
+
         self.capture.packet(
             packet, 'sent', datetime.now(UTC).isoformat(), time.monotonic_ns()
         )
@@ -177,6 +185,13 @@ class ProtocolClient:
             await self.handle(packet)
 
     async def run(self) -> None:
+        loop = asyncio.get_running_loop()
+        start = loop.time()
+        end = self._end = start + self.options.duration
+        login_deadline = self._login_deadline = min(
+            end, start + self.options.login_timeout
+        )
+        heartbeat = start + 5
         await self.send(
             'pb.UserLoginREQ',
             {
@@ -186,11 +201,6 @@ class ProtocolClient:
                 'chnl': self.session.channel,
             },
         )
-        loop = asyncio.get_running_loop()
-        start = loop.time()
-        end = start + self.options.duration
-        login_deadline = start + self.options.login_timeout
-        heartbeat = start + 5
         while loop.time() < end:
             now = loop.time()
             if not self.logged_in and now >= login_deadline:

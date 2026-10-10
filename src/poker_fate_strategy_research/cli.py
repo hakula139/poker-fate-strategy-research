@@ -1,6 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
+from zipfile import BadZipFile
 
 from .client import ClientError
 from .errors import InputError
@@ -26,10 +27,6 @@ def main() -> None:
     add_protocol_commands(commands)
 
     args = parser.parse_args()
-    if args.command in {'extract', 'schema'}:
-        args.run(args)
-        return
-
     try:
         args.run(args)
     except KeyboardInterrupt:
@@ -38,14 +35,25 @@ def main() -> None:
     except (ClientError, InputError) as error:
         print(str(error), file=sys.stderr)
         raise SystemExit(1) from None
+    except FileExistsError:
+        print('Output already exists. Choose a new output path.', file=sys.stderr)
+        raise SystemExit(1) from None
     except Exception as error:
-        print(
-            f'Unexpected failure ({type(error).__name__}).',
-            file=sys.stderr,
+        message = (
+            'Cannot access input or output. Check paths and permissions.'
+            if isinstance(error, OSError) and args.command in {'extract', 'schema'}
+            else f'Unexpected failure ({type(error).__name__}).'
         )
+        print(message, file=sys.stderr)
         raise SystemExit(1) from None
 
 
 def _extract(args: argparse.Namespace) -> None:
-    count = extract_apk(args.apk, args.output, args.seed_offset)
+    try:
+        count = extract_apk(args.apk, args.output, args.seed_offset)
+    except (BadZipFile, KeyError, ValueError) as error:
+        raise InputError(
+            'Cannot decode APK. Check the package and its metadata seed offset.'
+        ) from error
+
     print(f'Decoded {count} assets. Inventory: {args.output / "inventory.json"}')
