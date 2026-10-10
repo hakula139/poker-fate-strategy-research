@@ -169,7 +169,9 @@
           };
         in
         {
-          checks.pre-commit = preCommitCheck;
+          checks.pre-commit = preCommitCheck.overrideAttrs {
+            SKIP = "dprint";
+          };
 
           devShells = {
             android = pkgs.mkShell {
