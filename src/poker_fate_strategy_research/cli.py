@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from zipfile import BadZipFile
 
+from .android_observer import add_android_command
 from .client import ClientError
 from .errors import InputError
 from .extract import extract_apk
@@ -24,6 +25,7 @@ def main() -> None:
         help='Seed field offset in global-metadata.dat for this APK build.',
     )
     extract.set_defaults(run=_extract)
+    add_android_command(commands)
     add_protocol_commands(commands)
 
     args = parser.parse_args()

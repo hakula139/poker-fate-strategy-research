@@ -1,4 +1,5 @@
 addonmanager
+androidenv
 apktool
 cachix
 chnl
@@ -6,6 +7,7 @@ cspell
 deadnix
 direnv
 envrc
+frida
 fstat
 gameid
 hakula
@@ -13,6 +15,7 @@ hakula139
 holdem
 imei
 ingamehistory
+is_allin
 isort
 jadx
 libil2cpp
@@ -28,14 +31,17 @@ o_wronly
 pkgs
 pkproject
 pkproto
+pname
 prek
 pycache
+pypi
 pyproject
 pytest
 rdkey
 ruff
 seatid
 statix
+stdenv
 tpl_mult_language
 unitypy
 venv
