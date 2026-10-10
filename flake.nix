@@ -82,6 +82,41 @@
             }).androidsdk;
 
           # ----------------------------------------------------------------------
+          # Frida environment
+          # ----------------------------------------------------------------------
+          fridaPython =
+            let
+              wheel = {
+                aarch64-darwin = {
+                  hash = "sha256-UaY7owWhEuzuHSGkaphwAfr7vM/M91qBZy3nBpu+iRc=";
+                  platform = "macosx_11_0_arm64";
+                };
+                x86_64-linux = {
+                  hash = "sha256-6e1VVdFfpajcFon7ghb+x63hpA/3vV1YOMJqPvCX7Ec=";
+                  platform = "manylinux1_x86_64";
+                };
+              };
+            in
+            pkgs.python3Packages.frida-python.overridePythonAttrs rec {
+              version = "17.23.3";
+              src = pkgs.fetchPypi {
+                pname = "frida";
+                inherit version;
+                abi = "abi3";
+                dist = "cp37";
+                format = "wheel";
+                inherit (wheel.${system}) hash platform;
+                python = "cp37";
+              };
+            };
+
+          fridaTools = pkgs.frida-tools.override {
+            python3Packages = pkgs.python3Packages // {
+              frida-python = fridaPython;
+            };
+          };
+
+          # ----------------------------------------------------------------------
           # Pre-commit hooks
           # ----------------------------------------------------------------------
           preCommitCheck = git-hooks-nix.lib.${system}.run {
@@ -128,7 +163,7 @@
             android = pkgs.mkShell {
               packages = [
                 androidSdk
-                pkgs.frida-tools
+                fridaTools
                 pkgs.jdk17
               ];
 

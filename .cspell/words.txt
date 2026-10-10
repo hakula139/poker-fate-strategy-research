@@ -31,8 +31,10 @@ o_wronly
 pkgs
 pkproject
 pkproto
+pname
 prek
 pycache
+pypi
 pyproject
 pytest
 rdkey

@@ -215,23 +215,23 @@ wheels = [
 
 [[package]]
 name = "frida"
-version = "17.5.1"
+version = "17.23.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4b/99/9c264bae7500ed7683d25aa0450652baeb498e3233683d6f44eb747f2d2a/frida-17.5.1.tar.gz", hash = "sha256:633109df95a8eff9b104ac840a8f41a48cb92ac9a03f752ac5db03078a587e57", size = 924985, upload-time = "2025-11-05T18:56:33.443Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2b/e2/8fc23b6cc1f3c9b6f899e606b3671f9f5407d68bc635ede5cc7fd542a10a/frida-17.23.3.tar.gz", hash = "sha256:b815aeb78b77b899126feb999903365b303c5d46889696b3c71539604e874c09", size = 939885, upload-time = "2026-10-09T19:29:34.999Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bb/6e/f29f89bfadf35bfd41707ab7ecae111bd61c49f30481f35f5d39ca9e8c42/frida-17.5.1-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:860b144074bf0c255748c9bc5620b8cddfd456f12a607eeec1e76fe1a838f0c7", size = 23021464, upload-time = "2025-11-05T18:56:00.683Z" },
-    { url = "https://files.pythonhosted.org/packages/33/eb/652858963e18d4d5e94d2cce141f1e3e6b99e9c5ec2f12cc3bff02ca143e/frida-17.5.1-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:1e08c055e002cd68acd161607ff0f8d0602a31ba92999f17062960203dd89390", size = 32375835, upload-time = "2025-11-05T18:56:05.604Z" },
-    { url = "https://files.pythonhosted.org/packages/01/69/cff6fb6800271b9c17f8084a57e59a1c31a1c9a5899c03fdf6ec5763bca5/frida-17.5.1-cp37-abi3-manylinux1_i686.whl", hash = "sha256:4bf6d36e4f0b09bad5538990def6692b32848abb984f61366dc839b051c42bc0", size = 20439815, upload-time = "2025-11-05T18:56:07.785Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/cc/de85da5c21abda6114e717f2378d61a2fbb84bd4a58a80a48fc976485502/frida-17.5.1-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:8146072e328ba1423f697cc1f9a539caf7e639b700f6172d901a8b819c47be2d", size = 32487096, upload-time = "2025-11-05T18:56:10.192Z" },
-    { url = "https://files.pythonhosted.org/packages/47/97/b5d10041bf01a59644d5e43104d0dcf17662e117841c8243d945b199a0b6/frida-17.5.1-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:cd4f669b153c596b36746de51e74a2634a130cddad5054cca25576d921ed05b7", size = 21155339, upload-time = "2025-11-05T18:56:13.125Z" },
-    { url = "https://files.pythonhosted.org/packages/b7/aa/3da68792939700ebcf67bc0dc8c8dc7b9181486083be980bfb0978df0087/frida-17.5.1-cp37-abi3-manylinux2014_armv7l.whl", hash = "sha256:3a0739f044b7d0c8a1df04365023896004eed105d75c08f3c5bd78c7bf2f845a", size = 19118464, upload-time = "2025-11-05T18:56:15.094Z" },
-    { url = "https://files.pythonhosted.org/packages/b9/bc/c75e1da2e0237f001291e3de905aaac073bb7267e0669578cf6a5000122f/frida-17.5.1-cp37-abi3-manylinux_2_17_aarch64.whl", hash = "sha256:b08bf6fe4ca42b734b6f210d7b97723dfdb0353fecaf8d03597f5008c6cf6f15", size = 21155339, upload-time = "2025-11-05T18:56:17.491Z" },
-    { url = "https://files.pythonhosted.org/packages/87/ae/5422f0bdc980372f27b9a0fa42022a18203a684d2acf55e7b26d3f4dcc0f/frida-17.5.1-cp37-abi3-manylinux_2_17_armv7l.whl", hash = "sha256:cb7d098672935e3fa6c4256747a7f89324d7b46d794682d8e91e0355b1bb0cda", size = 19118466, upload-time = "2025-11-05T18:56:19.46Z" },
-    { url = "https://files.pythonhosted.org/packages/c3/ab/6e63119500f45a71006d0b85b9772b1e69aa9ac7d4868b199ae05112c331/frida-17.5.1-cp37-abi3-manylinux_2_5_i686.whl", hash = "sha256:31be3ec5157e806413e2091219ae83935c69afaaffa66f200f68e2eb4e48c538", size = 20439816, upload-time = "2025-11-05T18:56:21.458Z" },
-    { url = "https://files.pythonhosted.org/packages/74/fe/7a83c21d3578789e231be6efa08c960bfb38764dc267857e5d3210a5b929/frida-17.5.1-cp37-abi3-manylinux_2_5_x86_64.whl", hash = "sha256:69e5101d7f81fc4005fc3ce5dafba17072808b8ab259f47a33d82dec5ca02718", size = 32487098, upload-time = "2025-11-05T18:56:23.754Z" },
-    { url = "https://files.pythonhosted.org/packages/f7/e4/d3e256eba6f564d63f62c4ecfdd7f6aac7bc739637075cb4fdfdebfe67e0/frida-17.5.1-cp37-abi3-win32.whl", hash = "sha256:a815c7038f8a410788bdb1d0f08cf28d24b7a2fca4ab9869c825908bc2fcabc4", size = 26675859, upload-time = "2025-11-05T18:56:26.185Z" },
-    { url = "https://files.pythonhosted.org/packages/57/21/1ea24efe23efac04d25bce7156ddbd2763c8a8e1db516ad10c5c30c045c7/frida-17.5.1-cp37-abi3-win_amd64.whl", hash = "sha256:7efdeb7e95c8e025517e203c2d1121c9eb07c9a3f33a1312ed5960c757e2fe98", size = 41800874, upload-time = "2025-11-05T18:56:28.605Z" },
-    { url = "https://files.pythonhosted.org/packages/d9/ae/2bcdf314287d451581ce272eacb3cf83e7958eb6eefec0e8c5865cf0c340/frida-17.5.1-cp37-abi3-win_arm64.whl", hash = "sha256:6b2fc209c0a7889cceaf61ad08764621da7a7759f0c7e467857e534913642058", size = 51683625, upload-time = "2025-11-05T18:56:31.316Z" },
+    { url = "https://files.pythonhosted.org/packages/9c/3e/50ea3ae17e8d8d0310b560c2b86e90e9f97631eedebb1d7a0f6a4f9f8ebf/frida-17.23.3-cp37-abi3-macosx_10_13_x86_64.whl", hash = "sha256:14aded1fbcfc0b9cecec62b9190d41e558e9852d1128cc7e26e073da5646b60f", size = 29384697, upload-time = "2026-10-09T19:28:49.615Z" },
+    { url = "https://files.pythonhosted.org/packages/49/02/c2d4eb0b4353e6b1477a6bbf6ab465caa822f7fc910c79645e24266e9eeb/frida-17.23.3-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:51a63ba305a112ecee1d21a46a987001fafbbccfccf75a81672de7069bbe8917", size = 38316016, upload-time = "2026-10-09T19:28:53.875Z" },
+    { url = "https://files.pythonhosted.org/packages/06/72/a871a960e2630db10225e3c02d8d01026b45487386d9b389fa32cb7d02c1/frida-17.23.3-cp37-abi3-manylinux1_i686.whl", hash = "sha256:c770d39bcbc0a7f31837faec0a247ef4b27e6f1593dd5248bb7b87c92a0782b4", size = 26735594, upload-time = "2026-10-09T19:28:56.846Z" },
+    { url = "https://files.pythonhosted.org/packages/4e/83/578e0c38f40b74cba28811a8b49ca01b7a2e2a18825708a326acad3f021a/frida-17.23.3-cp37-abi3-manylinux1_x86_64.whl", hash = "sha256:e9ed5555d15fa5a8dc1689fb8216fec7ade1a40ff7bd5d5838c26a3ef097ec47", size = 39637692, upload-time = "2026-10-09T19:29:00.301Z" },
+    { url = "https://files.pythonhosted.org/packages/cb/5e/f6cfaf86baa883a0cd239aa4963b0f1dc3fbbad88f00f17405637a29d42f/frida-17.23.3-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:800892c4b6315aea807ecf36169966ba5cf1b3105629e2551e2586a9b801d6b1", size = 27231869, upload-time = "2026-10-09T19:29:03.364Z" },
+    { url = "https://files.pythonhosted.org/packages/63/db/572a340efcfbed56d24f10e75f66d88a8b99714c6e1b0dc69fdd9795aa4d/frida-17.23.3-cp37-abi3-manylinux2014_armv7l.whl", hash = "sha256:3de83ffe3d34d24db1da0e3feb3a042894e346a6754e35398baeabb0bfa53bde", size = 25037864, upload-time = "2026-10-09T19:29:06.498Z" },
+    { url = "https://files.pythonhosted.org/packages/d5/d1/bc69c9b11dd9c125c887c7dc23daecf15e7aa216e8bf89488bbbc7525084/frida-17.23.3-cp37-abi3-manylinux_2_17_aarch64.whl", hash = "sha256:1972f685e93d99279e2d23ed8364758bc21c37a17ec13bca91154b5dd5b42905", size = 27231871, upload-time = "2026-10-09T19:29:09.443Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/4b/4ef7a3dfe02dfe7feff4cec91110c76eb225a54e786b37587574064c2aa5/frida-17.23.3-cp37-abi3-manylinux_2_17_armv7l.whl", hash = "sha256:576a268ffa0018692f75f8f15ddbc97e2f17f31b259ef25c0772dbd772a804f4", size = 25037866, upload-time = "2026-10-09T19:29:12.828Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/94/2d719e1f6da384aa4726ad1e6bff888fe4e15bc3a6bbebf50a3c85e97fe1/frida-17.23.3-cp37-abi3-manylinux_2_5_i686.whl", hash = "sha256:2ac9c44787d69a5c51775d3d16ca8b2a6404e756f58f0fbafcc7e55322857316", size = 26735595, upload-time = "2026-10-09T19:29:16.192Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/a4/c6b0a5e111292cd78b4ab2a254dad944b60654ac479fe50692a171769af5/frida-17.23.3-cp37-abi3-manylinux_2_5_x86_64.whl", hash = "sha256:c92313a20db077663ccf4b1c281b69dcff316b1e5fad506e27567fed1468ce7d", size = 39637692, upload-time = "2026-10-09T19:29:19.353Z" },
+    { url = "https://files.pythonhosted.org/packages/0c/9e/fe5de37385e73d18b148a58d9cf862cd6dd9de63c5c7176d1e5f60466603/frida-17.23.3-cp37-abi3-win32.whl", hash = "sha256:be3008e27d96969aa06413c1e42c0709fd818941918474ff72e60275e7c89be8", size = 47646881, upload-time = "2026-10-09T19:29:23.093Z" },
+    { url = "https://files.pythonhosted.org/packages/5e/8f/8fe0179ec76deb88f786be19158322d0f867479d80a229a40d51fe334cbe/frida-17.23.3-cp37-abi3-win_amd64.whl", hash = "sha256:88b1f07514c38650faf6e803ed13dfaec1ba94efa4c8ed34c1525f8c151689d4", size = 50693447, upload-time = "2026-10-09T19:29:27.258Z" },
+    { url = "https://files.pythonhosted.org/packages/10/fc/1f97d73e195edc15f0e35cec5be1b15df136e53f3ca88d851644369d5ad3/frida-17.23.3-cp37-abi3-win_arm64.whl", hash = "sha256:09d420df923e9aa7ee1c07c5e7cb5da9c9078aac56a8aa2aa87caa64d12bcc8f", size = 59960482, upload-time = "2026-10-09T19:29:31.793Z" },
 ]
 
 [[package]]
@@ -542,7 +542,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "frida", marker = "extra == 'android'", specifier = "==17.5.1" },
+    { name = "frida", marker = "extra == 'android'", specifier = "==17.23.3" },
     { name = "protobuf", specifier = ">=7.36.2" },
     { name = "unitypy", specifier = ">=1.25.4" },
     { name = "websockets", specifier = ">=17.2" },

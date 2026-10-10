@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-android = ["frida==17.5.1"]
+android = ["frida==17.23.3"]
 
 [project.scripts]
 poker-fate-strategy = "poker_fate_strategy_research.cli:main"
