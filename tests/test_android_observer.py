@@ -137,6 +137,63 @@ def test_history_cards_preserve_seats_without_player_identity() -> None:
     }
 
 
+def test_sit_down_capture_retains_cards_without_identity(tmp_path: Path) -> None:
+    file = FileDescriptorProto(name='seats.proto', package='pb', syntax='proto2')
+    player = file.message_type.add(name='UserBrief')
+    player.field.add(name='uid', number=1, type=3, label=1)
+    player.field.add(name='name', number=2, type=9, label=1)
+    status = file.message_type.add(name='SeatStatus')
+    status.field.add(name='seatid', number=1, type=5, label=1)
+    status.field.add(
+        name='player', number=3, type=11, type_name='.pb.UserBrief', label=1
+    )
+    status.field.add(name='hand_chips', number=4, type=3, label=1)
+    for number, name in enumerate(('card1', 'card2', 'card3', 'card4'), start=18):
+        status.field.add(name=name, number=number, type=5, label=1)
+    message = file.message_type.add(name='SitDownBRC')
+    message.field.add(
+        name='status', number=4, type=11, type_name='.pb.SeatStatus', label=1
+    )
+    message.field.add(name='token', number=5, type=9, label=1)
+    schema = Schema(FileDescriptorSet(file=[file]).SerializeToString())
+    payload = schema.encode(
+        'pb.SitDownBRC',
+        {
+            'status': {
+                'seatid': 3,
+                'player': {'uid': 123456789, 'name': 'Identifiable Player'},
+                'hand_chips': 200,
+                'card1': 15,
+                'card2': 29,
+                'card3': 0,
+                'card4': 0,
+            },
+            'token': 'private-token',
+        },
+    )
+    output = tmp_path / 'seats.jsonl'
+    with ReceiveCapture(output, schema) as capture:
+        capture.frame(pack(Packet('pb.SitDownBRC', 9, payload)), 1, 1000)
+    text = output.read_text()
+    row = json.loads(text)
+    assert row['decode_status'] == 'decoded'
+    assert row['fields'] == {
+        'status': {
+            'seatid': 3,
+            'hand_chips': 200,
+            'card1': 15,
+            'card2': 29,
+            'card3': 0,
+            'card4': 0,
+        }
+    }
+    assert row['last_hand_card_seat'] is None
+    assert all(
+        value not in text
+        for value in ('123456789', 'Identifiable Player', 'private-token')
+    )
+
+
 def test_observer_detaches_on_script_failure(
     tmp_path: Path, descriptors: bytes, monkeypatch: pytest.MonkeyPatch
 ) -> None:
