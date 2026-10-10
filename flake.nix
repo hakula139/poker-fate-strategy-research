@@ -137,6 +137,13 @@
 
               deadnix.enable = true;
 
+              dprint = {
+                enable = true;
+                package = pkgs.dprint;
+                entry = "${pkgs.dprint}/bin/dprint fmt";
+                files = "\\.md$";
+              };
+
               end-of-file-fixer.enable = true;
 
               markdownlint-cli2 = {
@@ -162,7 +169,9 @@
           };
         in
         {
-          checks.pre-commit = preCommitCheck;
+          checks.pre-commit = preCommitCheck.overrideAttrs {
+            SKIP = "dprint";
+          };
 
           devShells = {
             android = pkgs.mkShell {

@@ -2,7 +2,7 @@
 
 <!-- cspell:ignore awsb -->
 
-The protocol client reuses a session established by an official client and records decoded WebSocket messages. Human interaction completes authentication, verification challenges and official warnings. The `observe` command connects without requesting room entry. The `practice` command requests one server Hold'em training entry and records subsequent messages. It does not send poker decisions, room-exit requests or display-completion acknowledgments.
+The protocol client reuses an official session and records WebSocket messages. `observe` connects without requesting room entry. `practice` requests a server Hold'em training seat. Poker decisions and room-exit requests require the official client. Live session reuse remains unverified.
 
 ## Prepare the local schema
 
@@ -14,7 +14,7 @@ uv run --no-sync poker-fate-strategy schema \
   --output work/android-1.7.0.pb
 ```
 
-Use the source directory from the extraction inventory if its location differs. The descriptor set remains local and its SHA-256 is included in each recording. Optional protobuf fields remain absent when their bytes were absent. Unknown message types and malformed payloads receive explicit status labels. A known message with fields outside the loaded schema sets `unknown_fields` to `true`, so a schema mismatch remains visible.
+Use the source directory listed in the extraction inventory. Recordings include the descriptor set's SHA-256, preserve optional-field absence, and label unknown messages or malformed payloads. `unknown_fields=true` flags fields outside the loaded schema.
 
 ## Capture an official login
 
@@ -32,13 +32,13 @@ PYTHONPATH="$PWD/src" mitmdump -q \
 
 Channel `3` is verified for the recorded Android 1.7.0 APK. Use the authenticating client's own native channel for another distribution. The addon reads its version from the HTTP `Version` header. Desktop compatibility and distribution values require verification against that desktop artifact.
 
-Configure the official client environment to use this proxy, then install its generated certificate in that environment as described in the [mitmproxy certificate guide](https://docs.mitmproxy.org/stable/concepts/certificates/). With a Windows virtual machine and a proxy running on its host, the guest needs a reachable host address and a listener bound to that address. Determine that address and agree on the listener configuration before changing network settings. The command above binds only to loopback.
+Configure the client to use the proxy and its generated certificate as described in the [mitmproxy certificate guide](https://docs.mitmproxy.org/stable/concepts/certificates/). The command binds to loopback. A VM guest requires a reachable host address and a listener configured for that address.
 
 The addon matches POST `/login` on `ga-foreign.poker-fate.com`. If the official client selects another recorded login host, set `--set login_host=awsb-entry.poker-fate.com` or its observed official host. Complete guest or email login in the official client. Handle any verification challenge there. Code `-6` carries the official risk warning and valid session fields. Complete that warning before reusing the captured session.
 
-Only the first accepted matching response is reduced to the WebSocket session fields and written with mode `600`. The addon omits the HTTP authorization value and never saves the request or full response. Keep `-q` and `flow_detail=0`, and leave flow saving disabled. Stop the proxy after capture. Close the official client before the script connects, so both clients do not compete for the same session. Session takeover and shutdown behavior remain unverified on the live service.
+The addon saves the first accepted matching response's session fields with mode `600`, omitting HTTP authorization and the full exchange. Keep `-q`, `flow_detail=0`, and flow saving disabled. Stop the proxy and close the official client before connecting the script to avoid competing sessions.
 
-If the client ignores the proxy or rejects its certificate, record the failure stage and pause that setup. Certificate pinning and alternate instrumentation require a separate decision based on the observed failure. The addon has been verified with a local synthetic HTTP server and the Nix-provided proxy runtime. It has not yet captured a live official-client login.
+Live proxy capture remains unverified. A client that ignores the proxy or rejects its certificate requires a separate setup decision before further instrumentation.
 
 An official login response captured through another agreed local method can also be imported:
 
@@ -48,7 +48,7 @@ uv run --no-sync poker-fate-strategy import-session work/login-response.json \
   --version 1.7.0 --channel 3 --output work/session.json
 ```
 
-The importer reads the root `uid`, `rdkey`, `login_ip`, and `server.server[0].server_host`. `--server-index` selects another returned endpoint. It accepts nonnegative HTTP codes and the official warning code `-6`, and requires the session fields. Keep the response and normalized session in ignored local storage. Share login status and failure stages in discussion without posting response contents or credentials.
+The importer requires `uid`, `rdkey`, `login_ip`, and `server.server[0].server_host`. `--server-index` selects another endpoint. Accepted codes are nonnegative or the official warning code `-6`.
 
 ## Observe messages
 
@@ -60,7 +60,7 @@ uv run --no-sync poker-fate-strategy observe \
   --output data/lobby-observation.jsonl --duration 60
 ```
 
-The client sends `UserLoginREQ` and empty `HeartBeatREQ` messages every five seconds. Login code `1002` keeps the client queued and delays room requests until code `0`. `--login-timeout` bounds that wait, and `--duration` bounds the connected observation. Environment proxies are disabled for this connection. WSS certificate verification stays enabled, and unencrypted WS is permitted only on loopback for local tests. Connections are made once without automatic reconnect.
+The client sends `UserLoginREQ` and keeps the connection alive with `HeartBeatREQ`. Login code `1002` queues the client until code `0`. `--login-timeout` bounds login, and `--duration` bounds observation. WSS certificate verification is enabled, environment proxies are disabled, and unencrypted WS is restricted to loopback. The client connects once.
 
 To request a snapshot for an already known room, add `--room-id`. This sends `GetRoomDataREQ` after login. Rejected or missing snapshots fail the operation. Pushed location messages are recorded without automatically issuing `EnterRoomREQ`.
 
@@ -74,16 +74,16 @@ uv run --no-sync poker-fate-strategy practice \
   --buy-in 40 --output data/training-observation.jsonl --duration 120
 ```
 
-This command changes live training state by requesting a seat with the selected training chips. The implemented request uses game type `40010101`, big blind `2`, currency ID `10100001`, and `wait_blind=true`. Buy-in must be an even integer from `40` to `60`, or a multiple of `20` from `80` to `400`, matching the inspected UI choices. The server can reject those values or require additional initialization. Such a result needs investigation before adding requests.
+This command requests a training seat with game type `40010101`, big blind `2`, currency ID `10100001`, and `wait_blind=true`. Buy-in must be an even integer from `40` to `60`, or a multiple of `20` from `80` to `400`, matching the inspected UI choices. Live training entry remains unverified.
 
-`QuickStartRSP` acceptance alone does not establish room readiness. A successful `EnterRoomRSP` with a positive room ID and the expected training type records `room-ready`. An operation that ends before its requested room becomes ready fails. The server may time out a seated player who does not send decisions. Ending the recording closes its transport without explicitly leaving the room, so verify the account's room state afterward in the official client.
+A successful `EnterRoomRSP` with a positive room ID and the expected training type records `room-ready`. An operation that ends before room readiness fails. The server may remove an inactive player. Ending the recording closes the connection, so check the account's room state in the official client.
 
 The source of these request fields is the [Android 1.7.0 artifact](../reference/artifacts/android-1.7.0.md): `EnumConfig.lua:56,165-168`, `tpl_table_poker_free.lua:8`, `tpl_constdata.lua:6`, and `LobbyByinDialog.lua:44-56`. Guide mode installs a local receiver, while this command always uses the server transport.
 
 ## Interpret a recording
 
-Each packet includes its sequence, direction, room ID, recipient context, UTC `observed_at`, and local `monotonic_ns`. Receive timestamps are taken after WebSocket message reassembly. Send timestamps are taken after the transport accepts the send. Multiple protocol packets in one WebSocket message share an observation timestamp and retain sequence order. All parsed packets are recorded before lifecycle handling, so a server rejection preserves later evidence from the same frame. Invalid framing records the receive times, frame size and error category without saving raw bytes or a frame hash.
+Packets retain sequence, direction, room ID, and recipient context. All packets in a frame are recorded before lifecycle handling, including packets following a server rejection. Invalid frames retain their size and error category.
 
-The recorder omits authentication payloads. UID fields become `self` or stable per-recording player aliases, and names in player records are removed. Known credential fields and the active session key are redacted. Non-authentication payload hashes identify local observations, while raw payload bytes are omitted. Unknown fields, free-form text and unrecognized identity formats still require review before sharing a recording. Captures stay in ignored local storage and are created with mode `600`. Existing output files are never overwritten.
+The recorder omits authentication payloads and raw bytes, replaces UIDs with per-recording aliases, and removes player names and known credentials. Files use mode `600`, and existing output is preserved. Unknown fields and free-form text require review before sharing.
 
-For hidden-card analysis, correlate the recorded cards with round identity, seat context and the authoritative stage in the corresponding message stream. Reception establishes delivery to this connection. It does not by itself establish when a legitimate UI displayed the data, whether another account received it, or how a separate cheating client obtained it. Keep those claims distinct when deriving findings.
+Interpret cards alongside hand identity, recipient role, and betting stage. Reception establishes delivery to the recorded connection. Other recipients' access and UI reveal state require separate evidence.

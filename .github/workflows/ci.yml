@@ -26,6 +26,9 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
 
+      - name: Check Markdown
+        run: nix develop -c dprint check
+
       - name: Check
         run: nix flake check --print-build-logs
 
