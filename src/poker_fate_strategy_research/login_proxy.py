@@ -1,9 +1,13 @@
+import logging
 from pathlib import Path
 
 from mitmproxy import ctx, http
 from mitmproxy.addonmanager import Loader
 
 from poker_fate_strategy_research.session import import_login
+
+
+logger = logging.getLogger(__name__)
 
 
 class LoginCapture:
@@ -33,7 +37,7 @@ class LoginCapture:
             return
 
         if not ctx.options.session_output or ctx.options.client_channel < 0:
-            ctx.log.error('Set session_output and the verified client_channel first.')
+            logger.error('Set session_output and the verified client_channel first.')
             return
 
         try:
@@ -44,13 +48,13 @@ class LoginCapture:
             )
             session.save(Path(ctx.options.session_output))
         except (ValueError, TypeError, OSError):
-            ctx.log.error(
+            logger.error(
                 'Session capture failed. Check login status and the output file.'
             )
             return
 
         self.saved = True
-        ctx.log.info('Saved official session. Stop the proxy before continuing.')
+        logger.info('Saved official session. Stop the proxy before continuing.')
 
 
 addons = [LoginCapture()]
