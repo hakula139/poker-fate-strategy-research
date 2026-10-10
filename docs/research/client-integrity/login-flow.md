@@ -1,33 +1,27 @@
 # Official login flow
 
-The decoded Android 1.7.0 client exposes an email-and-password login flow that waits for a native device-risk token before sending its login request. Official Android email login succeeded for a user-authorized existing account in the isolated emulator during the 2026-10-10 UTC runtime session. This does not establish a working script-only login. No registration verification-code delivery or password-recovery requests were made. The guest request result and official-client outcome are recorded under [runtime authentication status](#runtime-authentication-status).
+The Android 1.7.0 client requires a native device-risk token for email login. Official email login succeeded and enabled free-practice gameplay. Script-only authentication remains unverified.
 
-The source belongs to the [Android 1.7.0 artifact](../../reference/artifacts/android-1.7.0.md). Its [machine-readable record](../../reference/artifacts/android-1.7.0.json) records the artifact hashes. Line references below refer to the decoded Lua files and the generated native method map for that artifact.
+Source citations refer to the [Android 1.7.0 artifact](../../reference/artifacts/android-1.7.0.md) and its [method-map record](../../reference/artifacts/android-1.7.0.json).
 
 ## Email login
 
-`LoginLayer.lua:304-332` reads an email address and password, validates the email format and requires a nonempty password, then calls `LoginModel:emailLogin`. `EnumConfig.lua:386-395` assigns email login type `2`. This form requires an email address, so a player nickname alone cannot identify the login account.
-
-`LoginModel.lua:93-123` prepares the email as `token` and the password as `verify`, alongside the platform, device identifier and language. It stores a pending login action, then asks `YiDunHelper` to prepare the risk report. `LoginModel.lua:38-43` adds language, attribution ID, push token and the client loading-mask field before sending the request. `SdkHelper.lua:80-93` obtains and persists the device identifier through native or Unity identifiers, with a GUID fallback. `SdkHelper.lua:145-152` obtains the push token.
+The form validates an email address and a nonempty password, then selects login type `2` (`LoginLayer.lua:304-332`, `EnumConfig.lua:386-395`). `LoginModel:emailLogin` sends the email as `token` and password as `verify`, with platform, device, language, attribution, and push fields (`LoginModel.lua:38-43,93-123`, `SdkHelper.lua:80-93,145-152`). Sending waits for the native risk report.
 
 ## Native risk dependency
 
-`YiDunHelper.lua:2-4` defines version thresholds `1.4.10` and `1.5.3`. Android 1.7.0 selects the instance call `CS.DeviceFingerprint.Instance:GetToken()` at `YiDunHelper.lua:60-62`. The report contains account and IP placeholders, platform and scene information (`YiDunHelper.lua:48-58`). The login operation is represented by `"log"` (`EnumConfig.lua:422-424`).
+Android 1.7.0 uses `CS.DeviceFingerprint.Instance:GetToken()` (`YiDunHelper.lua:2-4,60-62`). The report contains account and IP placeholders, platform and scene information, and login operation `"log"` (`YiDunHelper.lua:48-58`, `EnumConfig.lua:422-424`). The token callback releases the pending login action, attaching `yidun_risk_check` (`YiDunHelper.lua:23-26,72-80`, `LoginModel.lua:104-105,258-260`).
 
-`YiDunHelper:setToken` stores the returned token and marks it ready (`YiDunHelper.lua:23-26`). A scheduled callback then inserts the token into the report and emits `evt_yidunTokenCallback` (`YiDunHelper.lua:72-80`). `LoginModel.lua:258-260` executes the pending action. That action attaches `yidun_risk_check` to the email login request (`LoginModel.lua:104-105`).
-
-The generated `dump.cs:329902-329950` identifies `DeviceFingerprint` as a Unity `MonoBehaviour` with initialization, token retrieval, coroutine waiting, role-information and touch-event methods. `script.json:513814-513822` maps `GetToken` and `WaitForToken`. These generated records contain method signatures and addresses. Their empty method bodies do not describe the native implementation, so token generation and its exact native-to-Lua delivery remain unresolved. The older-version and editor empty-token branches at `YiDunHelper.lua:64-69,81-84` do not establish support for an empty token in a current production login.
+The native map identifies `DeviceFingerprint` initialization, retrieval, and callback methods (`dump.cs:329902-329950`, `script.json:513814-513822`). Token generation and native-to-Lua delivery remain unresolved. Empty-token fallbacks are restricted to older versions and the editor (`YiDunHelper.lua:64-69,81-84`).
 
 ## Verification codes and providers
 
-The inspected views use email verification codes for registration and password recovery. Registration requests a code, confirms it, sets a password and then performs ordinary email login (`LoginRegisterDialog.lua:35-53,76-88`, `LoginModel.lua:127-170`). Recovery accepts account-identification input, confirms a code and changes the password (`LoginForgotDialog.lua:56-73,147-177`, `LoginModel.lua:517-536`). No routine verification-code login for an existing account was identified in these views. Recovery would change the account and needs separate authorization.
+Email verification codes support registration and password recovery (`LoginRegisterDialog.lua:35-53,76-88`, `LoginModel.lua:127-170`, `LoginForgotDialog.lua:56-73,147-177`, `LoginModel.lua:517-536`). The inspected existing-account flow uses a password. Recovery changes the account password.
 
-Provider selection depends on platform and distribution channel. `LoginLayer.lua:157-188` exposes email and guest login for ordinary Android, STOVE for selected mobile channels, and Steam or STOVE for selected PC channels. STOVE initializes its native provider selection (`LoginModel.lua:173-185`). Its callback and the Steam ticket callback route through `doLogin`, which also waits for the risk report (`LoginModel.lua:599-645,23-35`). These source paths establish provider distinctions, but do not establish current availability or compatibility with a particular account.
+Provider availability depends on platform and distribution. Ordinary Android exposes email and guest login, selected mobile channels expose STOVE, and selected PC channels expose Steam or STOVE (`LoginLayer.lua:157-188`). Provider callbacks also wait for the risk report (`LoginModel.lua:173-185,599-645,23-35`). Compatibility with a particular account requires runtime verification.
 
 ## Runtime authentication status
 
-A guest HTTP request on 2026-10-07 at 11:00:27 UTC, using a fresh local device identifier and omitting the native risk report, returned code `-5`. It issued no session. This establishes that the tested request shape was rejected, while the contribution of the device identifier, risk report and server policy remains unresolved.
+Official Android email login and [practice-table delivery](hidden-card-delivery.md#practice-table-runtime-observations) succeeded. A guest HTTP request with a fresh device identifier and no native risk report returned `-5` without a session. The cause of that rejection remains unresolved.
 
-The official Android client subsequently completed its normal email login and entered the free practice table. Live native receive callbacks confirm gameplay delivery to that client. Credentials, account identifiers, and authentication responses remain excluded from the research documents and receive recordings. The [practice-table observations](hidden-card-delivery.md#practice-table-runtime-observations) describe the capture method and its limits.
-
-The [protocol client](../../guides/protocol-client.md) imports a session from an official login response and performs the WebSocket handshake separately. Its response-capture addon and transport have passed local simulated tests. Official-client proxy compatibility, live session reuse, and training entry through that separate client remain unverified. The runtime session used the official client's existing connection.
+The separate [protocol client](../../guides/protocol-client.md) imports an official session and establishes its own WebSocket connection. Live proxy capture, session reuse, and training entry through that client remain unverified.

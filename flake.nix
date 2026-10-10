@@ -137,6 +137,13 @@
 
               deadnix.enable = true;
 
+              dprint = {
+                enable = true;
+                package = pkgs.dprint;
+                entry = "${pkgs.dprint}/bin/dprint fmt --plugins ${pkgs.dprint-plugins.dprint-plugin-markdown}/plugin.wasm --";
+                files = "\\.md$";
+              };
+
               end-of-file-fixer.enable = true;
 
               markdownlint-cli2 = {

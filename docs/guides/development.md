@@ -16,8 +16,6 @@ nix flake check --print-build-logs
 
 The development shell installs the same checks as Git hooks. CI runs them for pull requests, including requests based on another feature branch.
 
-Keep downloaded clients and generated analysis output in ignored `artifacts/`, `work/`, or `data/`. Store provenance and reproducible methods with the documentation that uses them.
-
 Python dependencies are recorded in `uv.lock`. Use `nix develop .#python` for the Python tools without the APK research environment. Both shells provide the same Python runtime, uv, protobuf compiler and proxy. Install the locked environment and run the Python checks when changing analysis tools:
 
 ```bash

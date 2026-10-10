@@ -1,6 +1,6 @@
 # Android 1.7.0
 
-This reference identifies the official Android package inspected on 2026-10-07 UTC. The [artifact record](android-1.7.0.json) contains complete hashes and selected source locations. Follow the [analysis guide](../../guides/analyze-apk.md) to reproduce the extraction.
+The [artifact record](android-1.7.0.json) identifies the inspected package and source files. The [analysis guide](../../guides/analyze-apk.md) explains extraction.
 
 ## Package identity
 
@@ -11,18 +11,16 @@ This reference identifies the official Android package inspected on 2026-10-07 U
 - Minimum Android SDK: `28`. Target Android SDK: `36`.
 - Size: `1,612,525,590` bytes.
 - SHA-256: `b7a77eb04e76013fe50ca4c25ecde1b2d6b8254353ab0d42dd83358417526e20`.
-- HTTP Last-Modified: `2026-09-28T04:17:12Z`.
-- HTTP ETag: `89a291b5f85f0fec3d6e728bd4205a8d-193`.
 
-The ETag is a multipart object identifier. It is recorded separately from the package hash. A conditional HEAD request on 2026-10-10 UTC returned HTTP `304` for that ETag, and the retained package still matched its recorded size and SHA-256. The download URL identifies a mutable distribution endpoint, so the findings apply to the recorded bytes.
+The download endpoint is mutable. Findings apply to the package identified by this SHA-256.
 
 ## Decoding parameters
 
-The package uses ARM64 IL2CPP and metadata version `31`. Il2CppDumper `6.7.46` mapped code registration at RVA `0x39ff040` and metadata registration at RVA `0x3b402f8`. Native disassembly established the XENC stream transformation and the separate XXTEA keys used by Lua and protocol assets. The implementation is in `src/poker_fate_strategy_research/bundles.py`.
+The package uses ARM64 IL2CPP and metadata version `31`. Code registration is at RVA `0x39ff040`, and metadata registration is at `0x3b402f8`. Source bundles use XENC, with separate XXTEA keys for Lua and protocol assets. The decoder is implemented in [bundles.py](../../../src/poker_fate_strategy_research/bundles.py).
 
 The static-field bytes used by the XENC decoder begin at metadata file offset `0x69ae20`. This offset is passed explicitly to the extractor. The selected bundle prefixes are `assets/aa/Android/gameres_assets_src/`, `assets/aa/Android/gameres_assets_src_`, and `assets/aa/Android/gameres_assets_proto_`.
 
-Native method locations for reproducing the decoder inspection are recorded below. File offsets apply to this ELF library and differ from runtime addresses.
+Native decoder locations use RVAs and ELF file offsets:
 
 | Method              | RVA         | File offset |
 | ------------------- | ----------- | ----------- |
@@ -38,8 +36,6 @@ Native method locations for reproducing the decoder inspection are recorded belo
 
 ## Source references
 
-Research citations use decoded filenames and one-based line ranges. The JSON record maps those names to full Unity container paths, APK bundle entries, path IDs, sizes, and SHA-256 values. It also records the native inputs, release archive, and generated method-map hashes. Downloaded and decoded files are retained locally in ignored paths.
+Research citations use decoded filenames and one-based line ranges. The artifact record maps them to Unity container paths, APK entries, path IDs, sizes, and hashes. It also identifies the native inputs, Il2CppDumper release, and generated method maps.
 
-One cited upstream class is named `LobbyByinDialog`. Its spelling is retained in evidence identifiers. The apparent intended spelling is "buy-in", and it is treated as an upstream typo in the spelling configuration.
-
-The client sources establish client behavior and message schemas. The subsequent [practice-table observations](../../research/client-integrity/hidden-card-delivery.md#practice-table-runtime-observations) record live delivery in a limited runtime session. They do not establish production-wide delivery permissions or the server implementation.
+The sources establish client behavior and message schemas. [Practice-table observations](../../research/client-integrity/hidden-card-delivery.md#practice-table-runtime-observations) cover limited live delivery. Wider server filtering remains unverified.
