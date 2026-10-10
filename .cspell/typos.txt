@@ -1,2 +1,3 @@
 byin_chips
 lobbybyindialog
+regist_flag

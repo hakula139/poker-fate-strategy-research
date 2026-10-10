@@ -5,6 +5,7 @@ description = "Poker Fate research tools"
 requires-python = ">=3.13"
 dependencies = [
     "protobuf>=7.36.2",
+    "python-dotenv>=1.2.4",
     "UnityPy>=1.25.4",
     "websockets>=17.2",
     "xxtea>=6.2.0",
