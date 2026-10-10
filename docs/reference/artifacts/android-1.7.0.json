@@ -321,5 +321,79 @@
     "method": "HEAD",
     "status": 304,
     "etag": "89a291b5f85f0fec3d6e728bd4205a8d-193"
+  },
+  "stove_sdk": {
+    "inspected_at_utc": "2026-10-10T11:20:34.200863+00:00",
+    "version": "2.8.3",
+    "configuration_version": "0.1.1",
+    "native_initialize_rva": "0x1cafaa4",
+    "dex": {
+      "apk_entry": "classes3.dex",
+      "size": 9656252,
+      "sha256": "74f29b11d9964ef22e27d290174b67d90f57caac08e22f5e7a020e4b80553767"
+    },
+    "decoder": "jadx --single-class <class> --single-class-output <directory> classes3.dex",
+    "sources": [
+      {
+        "class": "com.stove.base.constants.Constants",
+        "path": "work/stove-auth/sources/Constants.java",
+        "size": 19668,
+        "sha256": "6668bde00150419465e5bdc138c8a2fe6162becb7ef6dc6c5451741e519ad875"
+      },
+      {
+        "class": "com.stove.auth.SdkInfo",
+        "path": "work/stove-auth/sources/SdkInfo.java",
+        "size": 4894,
+        "sha256": "d8ed97d2820d01a81c1172476233b2c2bb90959d732d9fe7d95371a82b0ac5ed"
+      },
+      {
+        "class": "com.stove.auth.ui.email.Email",
+        "path": "work/stove-auth/sources/Email.java",
+        "size": 56172,
+        "sha256": "7372e60b023e6e2bde970dd74d2236cb11c7d845698819a31df08de7ab5f7731"
+      },
+      {
+        "class": "com.stove.base.network.Network",
+        "path": "work/stove-auth/sources/Network.java",
+        "size": 34112,
+        "sha256": "9cfdf128489a4f1d00e62cec3a5cd2bbf905634164e3a8e3beb16a857291a334"
+      },
+      {
+        "class": "com.stove.auth.ui.captcha.CaptchaWebFragment",
+        "path": "work/stove-auth/sources/CaptchaWebFragment.java",
+        "size": 29799,
+        "sha256": "48e1094c05f60b01df50d27288915b96eee76dda78e883d35ba0e0761f4b1ee3"
+      },
+      {
+        "class": "com.stove.auth.ui.email.JavaScriptInterface",
+        "path": "work/stove-auth/sources/JavaScriptInterface.java",
+        "size": 18159,
+        "sha256": "494213762e7406782323f842adb2ff8b8698c48f23d4b06f1f9aff5671d9178b"
+      },
+      {
+        "class": "com.stove.auth.ui.email.LoginFragment",
+        "path": "work/stove-auth/sources/LoginFragment.java",
+        "size": 30192,
+        "sha256": "c39be2f7d420424f7dba046b6e0cc1f46851710aa25a6f0a42af1effeb3f5581"
+      },
+      {
+        "class": "com.stove.auth.ui.c3",
+        "path": "work/stove-auth/sources/c3.java",
+        "size": 2805,
+        "sha256": "72031df5dfc6ff9f34e18c49ab39c01d8b8588653ee1196c5d66664f3a66c08a"
+      },
+      {
+        "class": "com.stove.auth.ui.g3",
+        "path": "work/stove-auth/sources/g3.java",
+        "size": 1925,
+        "sha256": "9bfc612df0e6bf9966d51ce25596bf2c3855da861cd60e3ffc5cf8f45ee56c70"
+      },
+      {
+        "class": "com.tencent.qcloud.tim.push.notification.NotificationClickProcessor",
+        "path": "work/stove-auth/sources/NotificationClickProcessor.java",
+        "size": 8932,
+        "sha256": "2d0e4f70d060030cec5b4b8079febae19a50989f4e4e120ea2780c4f4e06bdf0"
+      }
+    ]
   }
 }

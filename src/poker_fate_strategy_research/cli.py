@@ -7,6 +7,7 @@ from .client import ClientError
 from .errors import InputError
 from .extract import extract_apk
 from .protocol_cli import add_protocol_commands
+from .stove_cli import add_stove_command
 
 
 def main() -> None:
@@ -25,6 +26,7 @@ def main() -> None:
     )
     extract.set_defaults(run=_extract)
     add_protocol_commands(commands)
+    add_stove_command(commands)
 
     args = parser.parse_args()
     try:
