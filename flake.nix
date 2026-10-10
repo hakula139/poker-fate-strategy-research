@@ -49,6 +49,34 @@
         };
 
         # ----------------------------------------------------------------------
+        # Android environment
+        # ----------------------------------------------------------------------
+        androidPkgs = import nixpkgs {
+          inherit system;
+          config = {
+            android_sdk.accept_license = true;
+            allowUnfreePredicate = pkg: (pkg.meta.homepage or "") == "https://developer.android.com/tools";
+          };
+        };
+
+        androidSdk =
+          (androidPkgs.androidenv.composeAndroidPackages {
+            cmdLineToolsVersion = "20.0";
+            toolsVersion = null;
+            platformToolsVersion = "37.0.0";
+            buildToolsVersions = [ "36.0.0" ];
+            platformVersions = [ "36" ];
+            includeEmulator = true;
+            emulatorVersion = "36.5.11";
+            includeSystemImages = true;
+            systemImageTypes = [ "default" ];
+            abiVersions = [
+              (if pkgs.stdenv.hostPlatform.isAarch64 then "arm64-v8a" else "x86_64")
+            ];
+            includeCmake = false;
+          }).androidsdk;
+
+        # ----------------------------------------------------------------------
         # Pre-commit hooks
         # ----------------------------------------------------------------------
         preCommitCheck = git-hooks-nix.lib.${system}.run {
@@ -91,31 +119,59 @@
       {
         checks.pre-commit = preCommitCheck;
 
-        devShells.python = pkgs.mkShell pythonEnvironment;
+        devShells = {
+          python = pkgs.mkShell pythonEnvironment;
 
-        devShells.default = pkgs.mkShell (
-          pythonEnvironment
-          // {
-            packages =
-              pythonEnvironment.packages
-              ++ preCommitCheck.enabledPackages
-              ++ (with pkgs; [
-                apktool
-                binutils
-                curl
-                dotnet-runtime_8
-                file
-                git
-                jadx
-                jq
-                ripgrep
-                unzip
-                zsh
-              ]);
+          default = pkgs.mkShell (
+            pythonEnvironment
+            // {
+              packages =
+                pythonEnvironment.packages
+                ++ preCommitCheck.enabledPackages
+                ++ (with pkgs; [
+                  apktool
+                  binutils
+                  curl
+                  dotnet-runtime_8
+                  file
+                  git
+                  jadx
+                  jq
+                  ripgrep
+                  unzip
+                  zsh
+                ]);
 
-            inherit (preCommitCheck) shellHook;
-          }
-        );
+              inherit (preCommitCheck) shellHook;
+            }
+          );
+        }
+        //
+          pkgs.lib.optionalAttrs
+            (pkgs.lib.elem system [
+              "aarch64-darwin"
+              "x86_64-darwin"
+              "x86_64-linux"
+            ])
+            {
+              android = pkgs.mkShell {
+                packages = [
+                  androidSdk
+                  pkgs.jdk17
+                ];
+
+                ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+                ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+                JAVA_HOME = "${pkgs.jdk17.home}";
+
+                shellHook = ''
+                  export ANDROID_USER_HOME="$PWD/work/android-runtime"
+                  export ANDROID_EMULATOR_HOME="$ANDROID_USER_HOME"
+                  export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+                  mkdir -p "$ANDROID_AVD_HOME"
+                '';
+              };
+            };
 
         formatter = pkgs.nixfmt-tree;
       }
