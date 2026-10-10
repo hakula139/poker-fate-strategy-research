@@ -35,6 +35,20 @@
         pkgs = import nixpkgs { inherit system; };
 
         # ----------------------------------------------------------------------
+        # Python environment
+        # ----------------------------------------------------------------------
+        pythonEnvironment = {
+          packages = with pkgs; [
+            mitmproxy
+            protobuf
+            python313
+            uv
+          ];
+
+          UV_PYTHON_DOWNLOADS = "never";
+        };
+
+        # ----------------------------------------------------------------------
         # Pre-commit hooks
         # ----------------------------------------------------------------------
         preCommitCheck = git-hooks-nix.lib.${system}.run {
@@ -77,28 +91,31 @@
       {
         checks.pre-commit = preCommitCheck;
 
-        devShells.default = pkgs.mkShell {
-          packages =
-            preCommitCheck.enabledPackages
-            ++ (with pkgs; [
-              apktool
-              binutils
-              curl
-              dotnet-runtime_8
-              file
-              git
-              jadx
-              jq
-              python314
-              ripgrep
-              unzip
-              uv
-              zsh
-            ]);
+        devShells.python = pkgs.mkShell pythonEnvironment;
 
-          inherit (preCommitCheck) shellHook;
-          UV_PYTHON_DOWNLOADS = "never";
-        };
+        devShells.default = pkgs.mkShell (
+          pythonEnvironment
+          // {
+            packages =
+              pythonEnvironment.packages
+              ++ preCommitCheck.enabledPackages
+              ++ (with pkgs; [
+                apktool
+                binutils
+                curl
+                dotnet-runtime_8
+                file
+                git
+                jadx
+                jq
+                ripgrep
+                unzip
+                zsh
+              ]);
+
+            inherit (preCommitCheck) shellHook;
+          }
+        );
 
         formatter = pkgs.nixfmt-tree;
       }

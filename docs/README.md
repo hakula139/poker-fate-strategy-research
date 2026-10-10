@@ -4,6 +4,7 @@
 
 - [Development](guides/development.md): set up the pinned environment and run repository checks.
 - [Android client analysis](guides/analyze-apk.md): preserve an official package, inspect native metadata, and extract source assets.
+- [Protocol client](guides/protocol-client.md): capture an official session, observe messages, and enter server training.
 
 ## Reference
 

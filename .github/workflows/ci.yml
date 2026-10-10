@@ -38,22 +38,20 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v10.2.0
-        with:
-          enable-cache: true
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
 
       - name: Install dependencies
-        run: uv sync --locked
+        run: nix develop .#python -c uv sync --locked
 
       - name: Lint
-        run: uv run --no-sync ruff check
+        run: nix develop .#python -c uv run --no-sync ruff check
 
       - name: Format
-        run: uv run --no-sync ruff format --check
+        run: nix develop .#python -c uv run --no-sync ruff format --check
 
       - name: Type check
-        run: uv run --no-sync mypy
+        run: nix develop .#python -c uv run --no-sync mypy
 
       - name: Test
-        run: uv run --no-sync pytest -q
+        run: nix develop .#python -c uv run --no-sync pytest -q

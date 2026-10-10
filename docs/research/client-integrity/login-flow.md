@@ -24,4 +24,8 @@ The inspected views use email verification codes for registration and password r
 
 Provider selection depends on platform and distribution channel. `LoginLayer.lua:157-188` exposes email and guest login for ordinary Android, STOVE for selected mobile channels, and Steam or STOVE for selected PC channels. STOVE initializes its native provider selection (`LoginModel.lua:173-185`). Its callback and the Steam ticket callback route through `doLogin`, which also waits for the risk report (`LoginModel.lua:599-645,23-35`). These source paths establish provider distinctions, but do not establish current availability or compatibility with a particular account.
 
-The next decision is to identify the existing account's provider and choose a supported official client for user-controlled login. Script-only feasibility remains unverified until a legitimate source of the native risk result and the account's authentication flow is established. An offered nickname and manually entered verification code alone do not resolve those requirements.
+## Runtime authentication status
+
+A guest HTTP request on 2026-10-07 at 11:00:27 UTC, using a fresh local device identifier and omitting the native risk report, returned code `-5`. It issued no session. This establishes that the tested request shape was rejected, while the contribution of the device identifier, risk report and server policy remains unresolved.
+
+The [protocol client](../../guides/protocol-client.md) imports a session from an official login response and performs the WebSocket handshake separately. Its response-capture addon and transport have passed local simulated tests. Official-client proxy compatibility, live session reuse and server training entry remain unverified until a user completes official authentication.
