@@ -1,5 +1,3 @@
-# cspell:ignore fstat o_creat o_wronly
-
 import json
 import os
 import stat

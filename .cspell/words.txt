@@ -6,6 +6,7 @@ cspell
 deadnix
 direnv
 envrc
+fstat
 gameid
 hakula
 hakula139
@@ -22,6 +23,8 @@ nixfmt
 nixos
 nixpkgs
 numtide
+o_creat
+o_wronly
 pkgs
 pkproject
 pkproto
