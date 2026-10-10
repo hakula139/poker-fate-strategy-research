@@ -147,6 +147,11 @@
 
               nixfmt.enable = true;
 
+              prettier = {
+                enable = true;
+                files = "\\.js$";
+              };
+
               statix.enable = true;
 
               trim-trailing-whitespace = {
