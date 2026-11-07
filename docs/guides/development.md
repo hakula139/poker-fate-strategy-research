@@ -11,7 +11,7 @@ nix develop
 Run the repository checks before publishing a change:
 
 ```bash
-dprint check
+prek run --all-files
 nix flake check --print-build-logs
 ```
 
