@@ -41,8 +41,10 @@ pytest
 rdkey
 ruff
 seatid
+shfmt
 statix
 stdenv
+taplo
 tpl_mult_language
 unitypy
 venv
