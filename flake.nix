@@ -13,8 +13,8 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    git-hooks-nix = {
-      url = "github:cachix/git-hooks.nix";
+    devkit = {
+      url = "github:hakula139/devkit/v1.0.0-rc.3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -26,7 +26,7 @@
     {
       nixpkgs,
       flake-utils,
-      git-hooks-nix,
+      devkit,
       ...
     }:
     flake-utils.lib.eachSystem
@@ -119,59 +119,13 @@
           # ----------------------------------------------------------------------
           # Pre-commit hooks
           # ----------------------------------------------------------------------
-          preCommitCheck = git-hooks-nix.lib.${system}.run {
+          preCommit = (devkit.lib.mkLib pkgs).preCommit {
             src = ./.;
-            package = pkgs.prek;
-            hooks = {
-              check-added-large-files.enable = true;
-
-              check-yaml.enable = true;
-
-              cspell = {
-                enable = true;
-                args = [
-                  "--no-progress"
-                  "--no-must-find-files"
-                ];
-              };
-
-              deadnix.enable = true;
-
-              dprint = {
-                enable = true;
-                package = pkgs.dprint;
-                entry = "${pkgs.dprint}/bin/dprint fmt";
-                files = "\\.md$";
-              };
-
-              end-of-file-fixer.enable = true;
-
-              markdownlint-cli2 = {
-                enable = true;
-                entry = "${pkgs.markdownlint-cli2}/bin/markdownlint-cli2";
-                files = "\\.md$";
-              };
-
-              nixfmt.enable = true;
-
-              prettier = {
-                enable = true;
-                files = "\\.js$";
-              };
-
-              statix.enable = true;
-
-              trim-trailing-whitespace = {
-                enable = true;
-                args = [ "--markdown-linebreak-ext=md" ];
-              };
-            };
           };
+
         in
         {
-          checks.pre-commit = preCommitCheck.overrideAttrs {
-            SKIP = "dprint";
-          };
+          checks.pre-commit = preCommit.check;
 
           devShells = {
             android = pkgs.mkShell {
@@ -201,7 +155,6 @@
               // {
                 packages =
                   pythonEnvironment.packages
-                  ++ preCommitCheck.enabledPackages
                   ++ (with pkgs; [
                     apktool
                     binutils
@@ -216,7 +169,7 @@
                     zsh
                   ]);
 
-                inherit (preCommitCheck) shellHook;
+                inputsFrom = [ preCommit.shell ];
               }
             );
           };

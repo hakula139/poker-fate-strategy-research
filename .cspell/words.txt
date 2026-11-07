@@ -11,6 +11,7 @@ frida
 fstat
 gameid
 hakula
+hakula
 hakula139
 holdem
 imei
