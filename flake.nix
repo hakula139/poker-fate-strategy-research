@@ -165,6 +165,8 @@
             python = pkgs.mkShell pythonEnvironment;
 
             default = pkgs.mkShell {
+              inherit (pythonEnvironment) UV_PYTHON_DOWNLOADS;
+
               packages = with pkgs; [
                 apktool
                 binutils
