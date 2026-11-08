@@ -11,8 +11,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-    flake-utils.url = "github:numtide/flake-utils";
-
     devkit = {
       url = "github:hakula139/devkit/v1";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,11 +23,10 @@
   outputs =
     {
       nixpkgs,
-      flake-utils,
       devkit,
       ...
     }:
-    flake-utils.lib.eachSystem
+    devkit.lib.eachSystem
       [
         "aarch64-darwin"
         "x86_64-linux"
@@ -130,6 +127,8 @@
               markdownlint-cli2.enable = true;
               nixfmt.enable = true;
               prettier.enable = true;
+              ruff.enable = true;
+              ruff-format.enable = true;
               shellcheck.enable = true;
               shfmt.enable = true;
               sort-file-contents.enable = true;
@@ -165,28 +164,26 @@
 
             python = pkgs.mkShell pythonEnvironment;
 
-            default = pkgs.mkShell (
-              pythonEnvironment
-              // {
-                packages =
-                  pythonEnvironment.packages
-                  ++ (with pkgs; [
-                    apktool
-                    binutils
-                    curl
-                    dotnet-runtime_8
-                    file
-                    git
-                    jadx
-                    jq
-                    ripgrep
-                    unzip
-                    zsh
-                  ]);
+            default = pkgs.mkShell {
+              packages = with pkgs; [
+                apktool
+                binutils
+                curl
+                dotnet-runtime_8
+                file
+                git
+                jadx
+                jq
+                ripgrep
+                unzip
+                zsh
+              ];
 
-                inputsFrom = [ preCommit.shell ];
-              }
-            );
+              inputsFrom = [
+                (pkgs.mkShell pythonEnvironment)
+                preCommit.shell
+              ];
+            };
           };
 
           formatter = pkgs.nixfmt-tree;

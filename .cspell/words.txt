@@ -1,16 +1,17 @@
 addonmanager
 androidenv
+androidsdk
 apktool
 cachix
 chnl
 cspell
 deadnix
+devkit
 direnv
 envrc
 frida
 fstat
 gameid
-hakula
 hakula
 hakula139
 holdem
@@ -22,6 +23,7 @@ jadx
 libil2cpp
 markdownlint
 mitmdump
+monobehaviour
 mypy
 nixfmt
 nixos
@@ -34,6 +36,7 @@ pkproject
 pkproto
 pname
 prek
+protoc
 pycache
 pypi
 pyproject
@@ -45,7 +48,9 @@ shfmt
 statix
 stdenv
 taplo
+tpl_constdata
 tpl_mult_language
+uids
 unitypy
 venv
 xenc
