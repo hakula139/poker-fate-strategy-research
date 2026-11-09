@@ -11,7 +11,7 @@ nix develop
 Run the repository checks before publishing a change:
 
 ```bash
-dprint check
+prek run --all-files
 nix flake check --print-build-logs
 ```
 
@@ -21,8 +21,6 @@ Python dependencies are recorded in `uv.lock`. Use `nix develop .#python` for th
 
 ```bash
 uv sync --locked
-uv run --no-sync ruff check
-uv run --no-sync ruff format --check
 uv run --no-sync mypy
 uv run --no-sync pytest -q
 ```

@@ -1,10 +1,12 @@
 addonmanager
 androidenv
+androidsdk
 apktool
 cachix
 chnl
 cspell
 deadnix
+devkit
 direnv
 envrc
 frida
@@ -21,6 +23,7 @@ jadx
 libil2cpp
 markdownlint
 mitmdump
+monobehaviour
 mypy
 nixfmt
 nixos
@@ -33,6 +36,7 @@ pkproject
 pkproto
 pname
 prek
+protoc
 pycache
 pypi
 pyproject
@@ -40,9 +44,13 @@ pytest
 rdkey
 ruff
 seatid
+shfmt
 statix
 stdenv
+taplo
+tpl_constdata
 tpl_mult_language
+uids
 unitypy
 venv
 xenc

@@ -11,10 +11,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-    flake-utils.url = "github:numtide/flake-utils";
-
-    git-hooks-nix = {
-      url = "github:cachix/git-hooks.nix";
+    devkit = {
+      url = "github:hakula139/devkit/v2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -25,11 +23,10 @@
   outputs =
     {
       nixpkgs,
-      flake-utils,
-      git-hooks-nix,
+      devkit,
       ...
     }:
-    flake-utils.lib.eachSystem
+    devkit.lib.eachSystem
       [
         "aarch64-darwin"
         "x86_64-linux"
@@ -119,59 +116,30 @@
           # ----------------------------------------------------------------------
           # Pre-commit hooks
           # ----------------------------------------------------------------------
-          preCommitCheck = git-hooks-nix.lib.${system}.run {
+          preCommit = (devkit.lib.mkLib pkgs).preCommit {
             src = ./.;
-            package = pkgs.prek;
             hooks = {
-              check-added-large-files.enable = true;
-
+              actionlint.enable = true;
               check-yaml.enable = true;
-
-              cspell = {
-                enable = true;
-                args = [
-                  "--no-progress"
-                  "--no-must-find-files"
-                ];
-              };
-
+              cspell.enable = true;
               deadnix.enable = true;
-
-              dprint = {
-                enable = true;
-                package = pkgs.dprint;
-                entry = "${pkgs.dprint}/bin/dprint fmt";
-                files = "\\.md$";
-              };
-
-              end-of-file-fixer.enable = true;
-
-              markdownlint-cli2 = {
-                enable = true;
-                entry = "${pkgs.markdownlint-cli2}/bin/markdownlint-cli2";
-                files = "\\.md$";
-              };
-
+              dprint.enable = true;
+              markdownlint-cli2.enable = true;
               nixfmt.enable = true;
-
-              prettier = {
-                enable = true;
-                files = "\\.js$";
-              };
-
+              prettier.enable = true;
+              ruff.enable = true;
+              ruff-format.enable = true;
+              shellcheck.enable = true;
+              shfmt.enable = true;
+              sort-file-contents.enable = true;
               statix.enable = true;
-
-              trim-trailing-whitespace = {
-                enable = true;
-                args = [ "--markdown-linebreak-ext=md" ];
-              };
+              taplo.enable = true;
             };
           };
+
         in
         {
-          checks.pre-commit = preCommitCheck.overrideAttrs {
-            SKIP = "dprint";
-          };
+          checks.pre-commit = preCommit.check;
 
           devShells = {
             android = pkgs.mkShell {
@@ -196,29 +164,28 @@
 
             python = pkgs.mkShell pythonEnvironment;
 
-            default = pkgs.mkShell (
-              pythonEnvironment
-              // {
-                packages =
-                  pythonEnvironment.packages
-                  ++ preCommitCheck.enabledPackages
-                  ++ (with pkgs; [
-                    apktool
-                    binutils
-                    curl
-                    dotnet-runtime_8
-                    file
-                    git
-                    jadx
-                    jq
-                    ripgrep
-                    unzip
-                    zsh
-                  ]);
+            default = pkgs.mkShell {
+              inherit (pythonEnvironment) UV_PYTHON_DOWNLOADS;
 
-                inherit (preCommitCheck) shellHook;
-              }
-            );
+              packages = with pkgs; [
+                apktool
+                binutils
+                curl
+                dotnet-runtime_8
+                file
+                git
+                jadx
+                jq
+                ripgrep
+                unzip
+                zsh
+              ];
+
+              inputsFrom = [
+                (pkgs.mkShell pythonEnvironment)
+                preCommit.shell
+              ];
+            };
           };
 
           formatter = pkgs.nixfmt-tree;
