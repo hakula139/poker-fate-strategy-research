@@ -3,12 +3,7 @@ name = "poker-fate-strategy-research"
 version = "0.1.0"
 description = "Poker Fate research tools"
 requires-python = ">=3.13"
-dependencies = [
-  "protobuf>=7.36.2",
-  "UnityPy>=1.25.4",
-  "websockets>=17.2",
-  "xxtea>=6.2.0",
-]
+dependencies = ["protobuf>=7.36.2", "UnityPy>=1.25.4", "websockets>=17.2", "xxtea>=6.2.0"]
 
 [project.optional-dependencies]
 android = ["frida==17.23.3"]
