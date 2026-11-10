@@ -3,7 +3,6 @@ allin
 androidenv
 androidsdk
 apktool
-behaviour
 chnl
 constdata
 creat
@@ -19,8 +18,9 @@ imei
 ingame
 isort
 jadx
-libil
+libil2cpp
 mitmdump
+monobehaviour
 mult
 mypy
 nixfmt
