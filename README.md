@@ -1,5 +1,7 @@
 # Poker Fate Strategy Research
 
+[![Coverage](https://codecov.io/gh/hakula139/poker-fate-strategy-research/graph/badge.svg)](https://codecov.io/gh/hakula139/poker-fate-strategy-research)
+
 A research workspace for Poker Fate strategy and client behavior.
 
 The repository contains analysis tools and evidence-backed findings.
