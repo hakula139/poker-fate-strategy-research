@@ -52,7 +52,7 @@ def test_capture_presence_identity_and_redaction(
         capture.event(
             'test',
             detail=f'key: {session.rdkey}',
-            token='private',
+            token='private',  # noqa: S106
             owner_name='Identifiable Owner',
             user_name='Identifiable User',
             inviter_name='Identifiable Inviter',
@@ -70,7 +70,7 @@ def test_capture_presence_identity_and_redaction(
     assert 'payload_sha256' not in rows[3] and 'fields' not in rows[3]
     assert rows[4]['decode_status'] == 'unknown-message'
     assert rows[5]['decode_status'] == 'invalid-protobuf'
-    assert rows[6]['token'] == '[redacted]'
+    assert rows[6]['token'] == '[redacted]'  # noqa: S105
     assert rows[6]['user'] == {'uid': 'self', 'name': '[redacted]'}
     assert rows[0]['name'] == 'pb.CardsBRC'
     assert all(

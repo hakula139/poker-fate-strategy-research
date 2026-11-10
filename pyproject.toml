@@ -30,7 +30,8 @@ quote-style = "single"
 line-ending = "lf"
 
 [tool.ruff.lint]
-select = ["B", "C4", "E", "F", "I", "SIM", "UP", "W"]
+select = ["B", "C4", "E", "F", "I", "S", "SIM", "UP", "W"]
+ignore = ["S101", "S603", "S607"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2

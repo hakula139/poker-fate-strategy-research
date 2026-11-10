@@ -12,7 +12,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     devkit = {
-      url = "github:hakula139/devkit/v2";
+      url = "github:hakula139/devkit/v3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -34,12 +34,12 @@
       (
         system:
         let
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = nixpkgs.legacyPackages.${system};
 
           # ----------------------------------------------------------------------
           # Python environment
           # ----------------------------------------------------------------------
-          pythonEnvironment = {
+          pythonShell = pkgs.mkShell {
             packages = with pkgs; [
               mitmproxy
               protobuf
@@ -125,6 +125,7 @@
               deadnix.enable = true;
               dprint.enable = true;
               markdownlint-cli2.enable = true;
+              mypy.enable = true;
               nixfmt.enable = true;
               prettier.enable = true;
               ruff.enable = true;
@@ -139,8 +140,6 @@
 
         in
         {
-          checks.pre-commit = preCommit.check;
-
           devShells = {
             android = pkgs.mkShell {
               packages = [
@@ -162,10 +161,10 @@
               '';
             };
 
-            python = pkgs.mkShell pythonEnvironment;
+            python = pythonShell;
 
             default = pkgs.mkShell {
-              inherit (pythonEnvironment) UV_PYTHON_DOWNLOADS;
+              inherit (pythonShell) UV_PYTHON_DOWNLOADS;
 
               packages = with pkgs; [
                 apktool
@@ -182,8 +181,8 @@
               ];
 
               inputsFrom = [
-                (pkgs.mkShell pythonEnvironment)
-                preCommit.shell
+                pythonShell
+                preCommit
               ];
             };
           };
