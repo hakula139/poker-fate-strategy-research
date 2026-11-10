@@ -50,7 +50,8 @@ ignore_missing_imports = true
 [tool.coverage.run]
 source = ["src"]
 
-[tool.pytest.ini_options]
+[tool.pytest]
+minversion = "9.0"
 addopts = ["--cov", "--cov-report=term", "--cov-report=xml"]
+strict = true
 testpaths = ["tests"]
-pythonpath = ["src"]
