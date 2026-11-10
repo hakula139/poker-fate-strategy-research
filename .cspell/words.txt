@@ -2,7 +2,6 @@ addonmanager
 androidenv
 androidsdk
 apktool
-cachix
 chnl
 cspell
 deadnix

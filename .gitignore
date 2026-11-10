@@ -8,7 +8,7 @@ dist/
 
 # Nix
 .direnv/
-.pre-commit-config.yaml
+/.pre-commit-config.yaml
 result
 result-*
 

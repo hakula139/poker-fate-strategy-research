@@ -16,5 +16,5 @@ Run the repository hooks and the tests:
 
 ```bash
 nix develop -c run-hooks
-uv run --locked pytest -q
+nix develop -c uv run --locked pytest -q
 ```
