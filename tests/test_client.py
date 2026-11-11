@@ -2,7 +2,7 @@ import asyncio
 import json
 from dataclasses import replace
 from pathlib import Path
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 from google.protobuf.descriptor_pb2 import FieldDescriptorProto, FileDescriptorSet
@@ -236,27 +236,46 @@ def test_passive_snapshot_and_duration(
     session: Session,
 ) -> None:
     schema = Schema(descriptors)
+    socket = Mock(spec=ClientConnection)
+    responses = [
+        pack(Packet('pb.UserLoginRSP', 0, schema.encode('pb.UserLoginRSP', {}))),
+        pack(
+            Packet(
+                'pb.GetRoomDataRSP',
+                0,
+                schema.encode('pb.GetRoomDataRSP', {'roomid': 27}),
+            )
+        ),
+    ]
 
-    async def server(socket: ServerConnection) -> None:
-        await receive(socket)
-        await reply(socket, schema, 'pb.UserLoginRSP', {})
-        packet = await receive(socket)
-        assert packet.name == 'pb.GetRoomDataREQ' and packet.room_id == 27
-        assert schema.decode(packet.name, packet.payload) == {'roomid': 27}
-        await reply(socket, schema, 'pb.GetRoomDataRSP', {'roomid': 27})
-        await socket.wait_closed()
+    async def recv() -> bytes:
+        if responses:
+            return responses.pop(0)
+
+        return await asyncio.Future[bytes]()
+
+    socket.send = AsyncMock()
+    socket.recv = AsyncMock(side_effect=recv)
 
     async def run() -> None:
-        async with serve(server, '127.0.0.1', 0) as listener:
-            port = listener.sockets[0].getsockname()[1]
+        with patch('poker_fate_strategy_research.client.connect') as connect:
+            connect.return_value.__aenter__.return_value = socket
             await observe(
-                replace(session, server_url=f'ws://127.0.0.1:{port}'),
+                session,
                 descriptors,
                 tmp_path / 'capture.jsonl',
                 Observation(duration=0.1, room_id=27),
             )
 
     asyncio.run(run())
+
+    sent = [unpack(call.args[0])[0] for call in socket.send.await_args_list]
+    assert [packet.name for packet in sent] == [
+        'pb.UserLoginREQ',
+        'pb.GetRoomDataREQ',
+    ]
+    assert sent[1].room_id == 27
+    assert schema.decode(sent[1].name, sent[1].payload) == {'roomid': 27}
     assert (
         json.loads((tmp_path / 'capture.jsonl').read_text().splitlines()[-1])['status']
         == 'duration-complete'
