@@ -1,28 +1,20 @@
 # Development
 
-Enter the pinned development environment before running repository tools:
+## Enter the environment
+
+The default shell provides the APK analysis tools, a .NET runtime for native metadata inspection, Python with uv, the protobuf compiler, and mitmproxy. `direnv` loads it through `.envrc`, and entering it installs the Git hooks:
 
 ```bash
 nix develop
 ```
 
-`direnv` loads the same environment through `.envrc`. The flake provides Android resource decoding, Java decompilation, a .NET runtime for native metadata inspection, Python tooling, documentation checks, and spelling checks.
+`nix develop .#python` provides only the Python tools, and `nix develop .#android` the Android SDK, emulator, and Frida.
 
-Run the repository checks before publishing a change:
+## Check a change
 
-```bash
-prek run --all-files
-nix flake check --print-build-logs
-```
-
-The development shell installs Git hooks. CI runs Markdown and repository checks for pull requests, including requests based on another feature branch.
-
-Python dependencies are recorded in `uv.lock`. Use `nix develop .#python` for the Python tools without the APK research environment. Both shells provide the same Python runtime, uv, protobuf compiler and proxy. Install the locked environment and run the Python checks when changing analysis tools:
+Run the repository hooks and the tests:
 
 ```bash
-uv sync --locked
-uv run --no-sync mypy
-uv run --no-sync pytest -q
+nix develop -c run-hooks
+nix develop -c uv run --locked pytest -q
 ```
-
-Outside either development shell, the proxy integration test skips when `mitmdump` is unavailable.

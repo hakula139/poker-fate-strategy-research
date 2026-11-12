@@ -8,7 +8,7 @@ dist/
 
 # Nix
 .direnv/
-.pre-commit-config.yaml
+/.pre-commit-config.yaml
 result
 result-*
 
@@ -38,4 +38,3 @@ result-*
 .claude/agent-memory-local
 .claude/plans
 .claude/settings.local.json
-.claude/worktrees

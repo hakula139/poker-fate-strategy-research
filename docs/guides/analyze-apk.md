@@ -66,11 +66,10 @@ The archive targets .NET 7. The pinned development shell provides .NET 8, so the
 
 ## Extract Lua and protocol assets
 
-Install the locked Python dependencies, then select the metadata field offset recorded for the artifact:
+Select the metadata field offset recorded for the artifact:
 
 ```bash
-uv sync --locked
-uv run --no-sync poker-fate-strategy extract \
+uv run --locked poker-fate-strategy extract \
   artifacts/PokerFate_Android.apk \
   --output work/android-1.7.0 \
   --seed-offset 0x69ae20

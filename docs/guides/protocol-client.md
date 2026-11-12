@@ -6,10 +6,10 @@ The protocol client reuses an official session and records WebSocket messages. `
 
 ## Prepare the local schema
 
-Enter `nix develop`, run `uv sync --locked`, and [extract the recorded APK](analyze-apk.md). Compile its eight protobuf sources into a local descriptor set:
+Enter `nix develop` and [extract the recorded APK](analyze-apk.md). Compile its eight protobuf sources into a local descriptor set:
 
 ```bash
-uv run --no-sync poker-fate-strategy schema \
+uv run --locked poker-fate-strategy schema \
   work/android-1.7.0/sources/gameres_assets_proto_ed9afd34d986ed09f20d6f3133ed9092/Assets/GameRes/Proto \
   --output work/android-1.7.0.pb
 ```
@@ -44,7 +44,7 @@ An official login response captured through another agreed local method can also
 
 ```bash
 chmod 600 work/login-response.json
-uv run --no-sync poker-fate-strategy import-session work/login-response.json \
+uv run --locked poker-fate-strategy import-session work/login-response.json \
   --version 1.7.0 --channel 3 --output work/session.json
 ```
 
@@ -55,7 +55,7 @@ The importer requires `uid`, `rdkey`, `login_ip`, and `server.server[0].server_h
 Start with a short connection:
 
 ```bash
-uv run --no-sync poker-fate-strategy observe \
+uv run --locked poker-fate-strategy observe \
   --session work/session.json --schema work/android-1.7.0.pb \
   --output data/lobby-observation.jsonl --duration 60
 ```
@@ -69,7 +69,7 @@ To request a snapshot for an already known room, add `--room-id`. This sends `Ge
 Use an authorized guest account for the initial server training test:
 
 ```bash
-uv run --no-sync poker-fate-strategy practice \
+uv run --locked poker-fate-strategy practice \
   --session work/session.json --schema work/android-1.7.0.pb \
   --buy-in 40 --output data/training-observation.jsonl --duration 120
 ```

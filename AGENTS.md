@@ -13,6 +13,4 @@ Follow the user's global instructions. Keep this file focused on constraints tha
 
 ## Development
 
-Run `nix flake check` for repository hooks. When changing Python, run the locked checks declared in CI. Keep generated output local and reproducible from the recorded artifact.
-
-Use topic branches and squash-merged PRs. Obtain approval for each PR before merging. Keep local plans under ignored `.agents/plans/`.
+Keep generated output local and reproducible from the recorded artifact. Verify a change as the [development guide](docs/guides/development.md#check-a-change) describes.
