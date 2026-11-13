@@ -3,6 +3,7 @@ allin
 androidenv
 androidsdk
 apktool
+Cachix
 chnl
 constdata
 creat
