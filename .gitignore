@@ -18,6 +18,10 @@ result-*
 .envrc.local
 .venv/
 
+# Coverage
+.coverage
+coverage.xml
+
 # Caches
 .mypy_cache/
 .pytest_cache/
